@@ -57,6 +57,9 @@ public:
 
 		Ogre::TextureUnitState* laserTexture =
 			matLaser ->getTechnique(0) ->getPass(0)->createTextureUnitState("nm_rt.png");
+		
+		// TORRETA 1
+
 		// Creamos la cabeza de la torreta junto con su eje y le agregamos textura
 		//Ogre::Entity* entEjeCabezaTorreta = mSceneMgr ->createEntity("ejes01.mesh");
 		Ogre::Entity* entEscena07 = mSceneMgr->createEntity("usb_cubomod01.mesh");
@@ -66,40 +69,245 @@ public:
 		mSceneMgr->getRootSceneNode()->addChild(nodeTopeTorreta);
 		nodeTopeTorreta->attachObject(entEscena07);
 		//nodeTopeTorreta->attachObject(entEjeCabezaTorreta);
-		nodeTopeTorreta->setPosition(0,8,0);
-		// Espiral que rodea cuerpo de la torreta
-		Ogre::Entity* entEscena08 = mSceneMgr->createEntity("usb_helix.mesh");
-		entEscena08->setMaterial(mat);
-		mSceneMgr->getRootSceneNode()->attachObject(entEscena08);
-		// Cuerpo de la torreta
-		Ogre::Entity* entEscena09 = mSceneMgr->createEntity("usb_cilindro.mesh");
-		entEscena09->setMaterial(mat);
-		mSceneMgr->getRootSceneNode()->attachObject(entEscena09);
-		// Base de la torreta
-		Ogre::Entity* entEscena10 = mSceneMgr->createEntity("usb_pipe.mesh");
-		entEscena10->setMaterial(mat);
-		Ogre::SceneNode* nodeBaseTorreta = mSceneMgr ->createSceneNode("nodeBaseTorreta");
-		mSceneMgr->getRootSceneNode()->addChild(nodeBaseTorreta);
-		nodeBaseTorreta->attachObject(entEscena10);
-		nodeBaseTorreta->setPosition(0,-6,0);
+		nodeTopeTorreta->setPosition(-21.7,4.7,-227.4);
+		
 		// Cañon de la torreta
 		Ogre::Entity* entEscena11 = mSceneMgr->createEntity("usb_cilindro02.mesh");
 		entEscena11->setMaterial(mat);
 		Ogre::SceneNode* nodeTuboTorreta = mSceneMgr ->createSceneNode("nodeTuboTorreta");
-		mSceneMgr->getRootSceneNode()->addChild(nodeTuboTorreta);
+		nodeTopeTorreta->addChild(nodeTuboTorreta);
 		nodeTuboTorreta->attachObject(entEscena11);
 		nodeTuboTorreta->setScale(0.5,1.0,0.5);
 		nodeTuboTorreta->rotate(Ogre::Quaternion(Ogre::Degree(-90), Ogre::Vector3(0,0,1)) , Ogre::Node::TransformSpace::TS_WORLD);
-		nodeTuboTorreta->setPosition(6,8.5,0);
+		nodeTuboTorreta->translate(6,1,0);
+
+		// Cuerpo de la torreta
+		Ogre::Entity* entEscena08 = mSceneMgr->createEntity("usb_cilindro.mesh");
+		entEscena08->setMaterial(mat);
+		Ogre::SceneNode* nodeCuerpoTorreta = mSceneMgr ->createSceneNode("nodeCuerpoTorreta");
+		nodeTopeTorreta->addChild(nodeCuerpoTorreta);
+		nodeCuerpoTorreta->attachObject(entEscena08);
+		nodeCuerpoTorreta->translate(0.0,-8.0,0.0);
+		
+		// Espiral que rodea cuerpo de la torreta
+		Ogre::Entity* entEscena09 = mSceneMgr->createEntity("usb_helix.mesh");
+		entEscena09->setMaterial(mat);
+		Ogre::SceneNode* nodeEspiralTorreta = mSceneMgr ->createSceneNode("nodeEspiralTorreta");
+		nodeCuerpoTorreta->addChild(nodeEspiralTorreta);
+		nodeEspiralTorreta->attachObject(entEscena09);
+		
+		// Base de la torreta
+		Ogre::Entity* entEscena10 = mSceneMgr->createEntity("usb_pipe.mesh");
+		entEscena10->setMaterial(mat);
+		Ogre::SceneNode* nodeBaseTorreta = mSceneMgr ->createSceneNode("nodeBaseTorreta");
+		nodeEspiralTorreta->addChild(nodeBaseTorreta);
+		nodeBaseTorreta->attachObject(entEscena10);
+		nodeBaseTorreta->setScale(0.88,1.0,1.0);
+		nodeBaseTorreta->translate(0,-6,0);
+		
 		// Laser
 		Ogre::Entity* entEscena12 = mSceneMgr->createEntity("usb_laser.mesh");
 		entEscena12->setMaterial(matLaser);
 		Ogre::SceneNode* nodeLaser = mSceneMgr ->createSceneNode("nodeLaser");
 		mSceneMgr->getRootSceneNode()->addChild(nodeLaser);
-		nodeLaser->attachObject(entEscena12);
+		nodeTuboTorreta->attachObject(entEscena12);
 		nodeLaser->setScale(0.4,0.4,0.4);
 		nodeLaser->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,0,1)) , Ogre::Node::TransformSpace::TS_WORLD);
-		nodeLaser->setPosition(19,8.5,0);
+		nodeLaser->translate(19,8.5,0);
+		
+		/*
+		Real duration=4.0;
+		Real step=duration/4.0;
+		Animation* animation = mSceneMgr->createAnimation("LightAnim",duration);
+		animation->setInterpolationMode(Animation::IM_SPLINE);
+		NodeAnimationTrack* track = animation->createNodeTrack(0,nodeLaser);
+
+		// Declare it so that it is accessible in a frame listener (e.g. as an object you pass to the frame listener)
+		AnimationState * mLightAnimationState;
+		// ...
+				mLightAnimationState = mSceneMgr->createAnimationState("LightAnim");
+				mLightAnimationState->setEnabled(true);
+				mLightAnimationState->setLoop(true);
+		
+		 bool frameStarted(const FrameEvent& evt)
+		{
+		mLightAnimationState->addTime(evt.timeSinceLastFrame);
+ 
+		  return true;
+		}
+		*/
+
+		// TORRETA 2
+
+		// Creamos la cabeza de la torreta junto con su eje y le agregamos textura
+		//Ogre::Entity* entEjeCabezaTorreta = mSceneMgr ->createEntity("ejes01.mesh");
+		Ogre::Entity* CabezaT2 = mSceneMgr->createEntity("usb_cubomod01.mesh");
+		CabezaT2->setMaterial(mat);
+		Ogre::SceneNode* nodeTopeTorreta2 = mSceneMgr ->createSceneNode("nodeTopeTorreta2");
+		// Posicionamos la cabeza de la torreta
+		mSceneMgr->getRootSceneNode()->addChild(nodeTopeTorreta2);
+		nodeTopeTorreta2->attachObject(CabezaT2);
+		//nodeTopeTorreta->attachObject(entEjeCabezaTorreta);
+		nodeTopeTorreta2->setPosition(21.7,4.7,-408.0);
+		
+		// Cañon de la torreta
+		Ogre::Entity* CanonT2 = mSceneMgr->createEntity("usb_cilindro02.mesh");
+		CanonT2->setMaterial(mat);
+		Ogre::SceneNode* nodeTuboTorreta2 = mSceneMgr ->createSceneNode("nodeTuboTorreta2");
+		nodeTopeTorreta2->addChild(nodeTuboTorreta2);
+		nodeTuboTorreta2->attachObject(CanonT2);
+		nodeTuboTorreta2->setScale(0.5,1.0,0.5);
+		nodeTuboTorreta2->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,0,1)) , Ogre::Node::TransformSpace::TS_WORLD);
+		nodeTuboTorreta2->translate(-6,1,0);
+
+		// Cuerpo de la torreta
+		Ogre::Entity* CuerpoT2 = mSceneMgr->createEntity("usb_cilindro.mesh");
+		CuerpoT2->setMaterial(mat);
+		Ogre::SceneNode* nodeCuerpoTorreta2 = mSceneMgr ->createSceneNode("nodeCuerpoTorreta2");
+		nodeTopeTorreta2->addChild(nodeCuerpoTorreta2);
+		nodeCuerpoTorreta2->attachObject(CuerpoT2);
+		nodeCuerpoTorreta2->translate(0.0,-8.0,0.0);
+		
+		// Espiral que rodea cuerpo de la torreta
+		Ogre::Entity* EspiralT2 = mSceneMgr->createEntity("usb_helix.mesh");
+		EspiralT2->setMaterial(mat);
+		Ogre::SceneNode* nodeEspiralTorreta2 = mSceneMgr ->createSceneNode("nodeEspiralTorreta2");
+		nodeCuerpoTorreta2->addChild(nodeEspiralTorreta2);
+		nodeEspiralTorreta2->attachObject(EspiralT2);
+		
+		// Base de la torreta
+		Ogre::Entity* BaseT2 = mSceneMgr->createEntity("usb_pipe.mesh");
+		BaseT2->setMaterial(mat);
+		Ogre::SceneNode* nodeBaseTorreta2 = mSceneMgr ->createSceneNode("nodeBaseTorreta2");
+		nodeEspiralTorreta2->addChild(nodeBaseTorreta2);
+		nodeBaseTorreta2->attachObject(BaseT2);
+		nodeBaseTorreta2->setScale(0.88,1.0,1.0);
+		nodeBaseTorreta2->translate(0,-6,0);
+		
+		// Laser
+		Ogre::Entity* LaserT2 = mSceneMgr->createEntity("usb_laser.mesh");
+		LaserT2->setMaterial(matLaser);
+		Ogre::SceneNode* nodeLaser2 = mSceneMgr ->createSceneNode("nodeLaser2");
+		mSceneMgr->getRootSceneNode()->addChild(nodeLaser2);
+		nodeTuboTorreta2->attachObject(LaserT2);
+		nodeLaser2->setScale(0.4,0.4,0.4);
+		nodeLaser2->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,0,1)) , Ogre::Node::TransformSpace::TS_WORLD);
+		nodeLaser2->translate(19,8.5,0);
+
+		// TORRETA 3
+
+		// Creamos la cabeza de la torreta junto con su eje y le agregamos textura
+		//Ogre::Entity* entEjeCabezaTorreta = mSceneMgr ->createEntity("ejes01.mesh");
+		Ogre::Entity* CabezaT3 = mSceneMgr->createEntity("usb_cubomod01.mesh");
+		CabezaT3->setMaterial(mat);
+		Ogre::SceneNode* nodeTopeTorreta3 = mSceneMgr ->createSceneNode("nodeTopeTorreta3");
+		// Posicionamos la cabeza de la torreta
+		mSceneMgr->getRootSceneNode()->addChild(nodeTopeTorreta3);
+		nodeTopeTorreta3->attachObject(CabezaT3);
+		//nodeTopeTorreta->attachObject(entEjeCabezaTorreta);
+		nodeTopeTorreta3->setPosition(-22.7,4.7,-637.4);
+		
+		// Cañon de la torreta
+		Ogre::Entity* CanonT3 = mSceneMgr->createEntity("usb_cilindro02.mesh");
+		CanonT3->setMaterial(mat);
+		Ogre::SceneNode* nodeTuboTorreta3 = mSceneMgr ->createSceneNode("nodeTuboTorreta3");
+		nodeTopeTorreta3->addChild(nodeTuboTorreta3);
+		nodeTuboTorreta3->attachObject(CanonT3);
+		nodeTuboTorreta3->setScale(0.5,1.0,0.5);
+		nodeTuboTorreta3->rotate(Ogre::Quaternion(Ogre::Degree(-90), Ogre::Vector3(0,0,1)) , Ogre::Node::TransformSpace::TS_WORLD);
+		nodeTuboTorreta3->translate(6,1,0);
+
+		// Cuerpo de la torreta
+		Ogre::Entity* CuerpoT3 = mSceneMgr->createEntity("usb_cilindro.mesh");
+		CuerpoT3->setMaterial(mat);
+		Ogre::SceneNode* nodeCuerpoTorreta3 = mSceneMgr ->createSceneNode("nodeCuerpoTorreta3");
+		nodeTopeTorreta3->addChild(nodeCuerpoTorreta3);
+		nodeCuerpoTorreta3->attachObject(CuerpoT3);
+		nodeCuerpoTorreta3->translate(0.0,-8.0,0.0);
+		
+		// Espiral que rodea cuerpo de la torreta
+		Ogre::Entity* EspiralT3 = mSceneMgr->createEntity("usb_helix.mesh");
+		EspiralT3->setMaterial(mat);
+		Ogre::SceneNode* nodeEspiralTorreta3 = mSceneMgr ->createSceneNode("nodeEspiralTorreta3");
+		nodeCuerpoTorreta3->addChild(nodeEspiralTorreta3);
+		nodeEspiralTorreta3->attachObject(EspiralT3);
+		
+		// Base de la torreta
+		Ogre::Entity* BaseT3 = mSceneMgr->createEntity("usb_pipe.mesh");
+		BaseT3->setMaterial(mat);
+		Ogre::SceneNode* nodeBaseTorreta3 = mSceneMgr ->createSceneNode("nodeBaseTorreta3");
+		nodeEspiralTorreta3->addChild(nodeBaseTorreta3);
+		nodeBaseTorreta3->attachObject(BaseT3);
+		nodeBaseTorreta3->setScale(0.88,1.0,1.0);
+		nodeBaseTorreta3->translate(0,-6,0);
+		
+		// Laser
+		Ogre::Entity* LaserT3 = mSceneMgr->createEntity("usb_laser.mesh");
+		LaserT3->setMaterial(matLaser);
+		Ogre::SceneNode* nodeLaser3 = mSceneMgr ->createSceneNode("nodeLaser3");
+		mSceneMgr->getRootSceneNode()->addChild(nodeLaser3);
+		nodeTuboTorreta3->attachObject(LaserT3);
+		nodeLaser3->setScale(0.4,0.4,0.4);
+		nodeLaser3->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,0,1)) , Ogre::Node::TransformSpace::TS_WORLD);
+		nodeLaser3->translate(19,8.5,0);
+		
+		// TORRETA 4
+
+		// Creamos la cabeza de la torreta junto con su eje y le agregamos textura
+		//Ogre::Entity* entEjeCabezaTorreta = mSceneMgr ->createEntity("ejes01.mesh");
+		Ogre::Entity* CabezaT4 = mSceneMgr->createEntity("usb_cubomod01.mesh");
+		CabezaT4->setMaterial(mat);
+		Ogre::SceneNode* nodeTopeTorreta4 = mSceneMgr ->createSceneNode("nodeTopeTorreta4");
+		// Posicionamos la cabeza de la torreta
+		mSceneMgr->getRootSceneNode()->addChild(nodeTopeTorreta4);
+		nodeTopeTorreta4->attachObject(CabezaT4);
+		//nodeTopeTorreta->attachObject(entEjeCabezaTorreta);
+		nodeTopeTorreta4->setPosition(21.7,4.7,-882.8);
+		
+		// Cañon de la torreta
+		Ogre::Entity* CanonT4 = mSceneMgr->createEntity("usb_cilindro02.mesh");
+		CanonT4->setMaterial(mat);
+		Ogre::SceneNode* nodeTuboTorreta4 = mSceneMgr ->createSceneNode("nodeTuboTorreta4");
+		nodeTopeTorreta4->addChild(nodeTuboTorreta4);
+		nodeTuboTorreta4->attachObject(CanonT4);
+		nodeTuboTorreta4->setScale(0.5,1.0,0.5);
+		nodeTuboTorreta4->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,0,1)) , Ogre::Node::TransformSpace::TS_WORLD);
+		nodeTuboTorreta4->translate(-6,1,0);
+
+		// Cuerpo de la torreta
+		Ogre::Entity* CuerpoT4 = mSceneMgr->createEntity("usb_cilindro.mesh");
+		CuerpoT4->setMaterial(mat);
+		Ogre::SceneNode* nodeCuerpoTorreta4 = mSceneMgr ->createSceneNode("nodeCuerpoTorreta4");
+		nodeTopeTorreta4->addChild(nodeCuerpoTorreta4);
+		nodeCuerpoTorreta4->attachObject(CuerpoT4);
+		nodeCuerpoTorreta4->translate(0.0,-8.0,0.0);
+		
+		// Espiral que rodea cuerpo de la torreta
+		Ogre::Entity* EspiralT4 = mSceneMgr->createEntity("usb_helix.mesh");
+		EspiralT4->setMaterial(mat);
+		Ogre::SceneNode* nodeEspiralTorreta4 = mSceneMgr ->createSceneNode("nodeEspiralTorreta4");
+		nodeCuerpoTorreta4->addChild(nodeEspiralTorreta4);
+		nodeEspiralTorreta4->attachObject(EspiralT4);
+		
+		// Base de la torreta
+		Ogre::Entity* BaseT4 = mSceneMgr->createEntity("usb_pipe.mesh");
+		BaseT4->setMaterial(mat);
+		Ogre::SceneNode* nodeBaseTorreta4 = mSceneMgr ->createSceneNode("nodeBaseTorreta4");
+		nodeEspiralTorreta4->addChild(nodeBaseTorreta4);
+		nodeBaseTorreta4->attachObject(BaseT4);
+		nodeBaseTorreta4->setScale(0.88,1.0,1.0);
+		nodeBaseTorreta4->translate(0,-6,0);
+		
+		// Laser
+		Ogre::Entity* LaserT4 = mSceneMgr->createEntity("usb_laser.mesh");
+		LaserT4->setMaterial(matLaser);
+		Ogre::SceneNode* nodeLaser4 = mSceneMgr ->createSceneNode("nodeLaser4");
+		mSceneMgr->getRootSceneNode()->addChild(nodeLaser4);
+		nodeTuboTorreta4->attachObject(LaserT4);
+		nodeLaser4->setScale(0.4,0.4,0.4);
+		nodeLaser4->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,0,1)) , Ogre::Node::TransformSpace::TS_WORLD);
+		nodeLaser4->translate(19,8.5,0);
+
 	}
 
 };
