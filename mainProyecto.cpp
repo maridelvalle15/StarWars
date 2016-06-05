@@ -4,9 +4,70 @@
 Ogre::AnimationState* AnimacionLaser;
 
 class FrameListenerClase : public Ogre::FrameListener{
+private:
+	OIS::InputManager* _man;
+	Ogre::Camera* _cam;
+	OIS::Keyboard* _key;
+	OIS::Mouse* _mouse;
 
 public:
+	FrameListenerClase( Ogre::Camera* cam,  RenderWindow* win){
+		size_t windowHnd = 0;
+		std::stringstream windowHndStr;
+		win->getCustomAttribute("WINDOW",&windowHnd);
+		//windowHndStr << windowHnd;
+
+		/*OIS::ParamList pl;
+		pl.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str())); */
+
+		/*_key= static_cast<OIS::Keyboard*>(_man->createInputObject(OIS::OISKeyboard,false));
+		_mouse= static_cast<OIS::Mouse*>(_man->createInputObject(OIS::OISMouse,false));*/
+		_cam = cam;
+	}
+
 	bool frameStarted(const Ogre::FrameEvent &evt){
+		/*_key->capture();
+		_mouse->capture();
+
+
+		float movSpeed = 10.0f;
+		Ogre::Vector3 tmov(0,0,0);
+		Ogre::Vector3 tcam(0,0,0);
+
+		if(_key->isKeyDown(OIS::KC_ESCAPE))
+			return false;
+		
+		if(_key->isKeyDown(OIS::KC_W))
+			tcam += Ogre::Vector3(0,0,-10);
+
+		if(_key->isKeyDown(OIS::KC_S))
+			tcam += Ogre::Vector3(0,0,10);
+
+		if(_key->isKeyDown(OIS::KC_A))
+			tcam += Ogre::Vector3(10,0,0);
+
+		if(_key->isKeyDown(OIS::KC_D))
+			tcam += Ogre::Vector3(-10,0,0);
+
+		if(_key->isKeyDown(OIS::KC_K))
+			tmov += Ogre::Vector3(20,0,0);
+
+		if(_key->isKeyDown(OIS::KC_H))
+			tmov += Ogre::Vector3(-20,0,0);
+
+		if(_key->isKeyDown(OIS::KC_U))
+			tmov += Ogre::Vector3(0,0,20);
+
+		if(_key->isKeyDown(OIS::KC_J))
+			tmov += Ogre::Vector3(0,0,-20);
+
+		float rotX =_mouse->getMouseState().X.rel * evt.timeSinceLastFrame *-1;
+		float rotY =_mouse->getMouseState().Y.rel * evt.timeSinceLastFrame *-1;
+		_cam->yaw(Ogre::Radian(rotX));
+		_cam->pitch(Ogre::Radian(rotY));
+		_cam->moveRelative(tcam*movSpeed*evt.timeSinceLastFrame);*/
+
+
 		AnimacionLaser->addTime(evt.timeSinceLastFrame);
 		return true;
 	}
@@ -24,6 +85,12 @@ public:
 		mCamera->setPosition(0,10,50);
 		mCamera->lookAt(0,0,-50);
 		mCamera->setNearClipDistance(5);
+
+	}
+
+	void createFrameListener(){
+		Ogre::FrameListener* FrameListener01 = new FrameListenerClase(mCamera,mWindow);
+		mRoot->addFrameListener(FrameListener01);
 
 	}
 
@@ -302,45 +369,23 @@ public:
 
 		
 		//Create animacion del laser
-		float duration = 7.0;
+		float duration = 4.0;
 		Ogre::Animation* animationLaser = mSceneMgr->createAnimation("AnimLaser",duration);
 		animationLaser->setInterpolationMode(Animation::IM_SPLINE);
 
-		Ogre::NodeAnimationTrack* Lasertrack = animationLaser->createNodeTrack(0,nodeLaser);
+		Ogre::NodeAnimationTrack* LaserTrack = animationLaser->createNodeTrack(0,nodeLaser);
 		Ogre::TransformKeyFrame* key;
 
-		key = Lasertrack->createNodeKeyFrame(0.0);
-		key->setTranslate(Vector3(0,10,0));  
+		key = LaserTrack->createNodeKeyFrame(0.0);
+		key->setTranslate(Vector3(0,10,0));
 		key->setScale(Vector3(0.7,0.2,0.4));
+		//key->setScale(Vector3(0.03,0.03,0.03));
+		//nodeLaser->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,0,0)) , Ogre::Node::TransformSpace::TS_WORLD);
 
 
-		key = Lasertrack->createNodeKeyFrame(1.0);
-		key->setTranslate(Vector3(0,20,1));
-		key->setScale(Vector3(0.7,0.2,0.4));
-
-		key = Lasertrack->createNodeKeyFrame(2.0);
-		key->setTranslate(Vector3(0,30,2));
-		key->setScale(Vector3(0.7,0.2,0.4));
-
-		key = Lasertrack->createNodeKeyFrame(3.0);
-		key->setTranslate(Vector3(0,40,3));
-		key->setScale(Vector3(0.7,0.2,0.4));
-
-		key = Lasertrack->createNodeKeyFrame(4.0);
-		key->setTranslate(Vector3(0,10,4));
-		key->setScale(Vector3(0.7,0.2,0.4));
-
-		key = Lasertrack->createNodeKeyFrame(5.0);
-		key->setTranslate(Vector3(0,10,5));
-		key->setScale(Vector3(0.7,0.2,0.4));
-
-		key = Lasertrack->createNodeKeyFrame(6.0);
-		key->setTranslate(Vector3(0,10,6));
-		key->setScale(Vector3(0.7,0.2,0.4));
-
-		key = Lasertrack->createNodeKeyFrame(7.0);
-		key->setTranslate(Vector3(0,10,7));
-		key->setScale(Vector3(0.7,0.2,0.4));
+		key = LaserTrack->createNodeKeyFrame(4.0);
+		key->setTranslate(Vector3(0,30,0));
+		//key->setScale(Vector3(0.03,0.03,0.03));
 
 		AnimacionLaser=mSceneMgr->createAnimationState("AnimLaser");
 		AnimacionLaser->setEnabled(true);
