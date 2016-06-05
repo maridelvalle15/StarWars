@@ -82,6 +82,79 @@ public:
 
 };
 
+
+ManualObject* createPlane(SceneManager* mSceneMgr, float x00, float x10, float x11, float x01, float y00, float y10, float y11, float y01, float z00, float z10, float z11, float z01, String name, String matN){
+
+	ManualObject* moPlane = mSceneMgr->createManualObject(name);
+	moPlane->begin(matN, RenderOperation::OT_TRIANGLE_STRIP);
+	 
+	// define vertex position of index 0..3
+
+	//2,125-0.5-0.5
+	moPlane->position(x00, y00, z00);
+	moPlane->normal(x00, y00, z00);
+	moPlane->textureCoord(0,0);
+	moPlane->position(x10, y10, z10);
+	moPlane->normal(x10, y10, z10);
+	moPlane->textureCoord(1,0);
+	moPlane->position(x11, y11, z11);
+	moPlane->normal(x11, y11, z11);
+	moPlane->textureCoord(1,1);
+	moPlane->position(x01, y01, z01);
+	moPlane->normal(x01, y01, z01);
+	moPlane->textureCoord(0,1);
+
+
+	moPlane->index(0);
+	moPlane->index(1);
+	moPlane->index(2);
+	moPlane->index(3);
+	moPlane->index(0);
+
+
+	moPlane->end();		
+
+	return moPlane;
+
+}
+
+
+ManualObject* createTriangle(SceneManager* mSceneMgr, float x00, float x10, float x11, float y00, float y10, float y11, float z00, float z10, float z11,    String name, String matN){
+
+	ManualObject* moTriag = mSceneMgr->createManualObject(name);
+	moTriag->begin(matN, RenderOperation::OT_TRIANGLE_LIST);
+	 
+	// define vertex position of index 0..3
+
+	//2,125-0.5-0.5
+	moTriag->position(x00, y00, z00);
+	moTriag->normal(x00, y00, z00);
+	moTriag->textureCoord(0,0);
+	moTriag->position(x10, y10, z10);
+	moTriag->normal(x10, y10, z10);
+	moTriag->textureCoord(1,0);
+	moTriag->position(x11, y11, z11);
+	moTriag->normal(x11, y11, z11);
+	moTriag->textureCoord(0.5f,0.5f);
+	//moTriag->position(x01, y01, z01);
+	//moTriag->normal(x01, y01, z01);
+	//moTriag->textureCoord(0,1);
+
+
+	moTriag->index(0);
+	moTriag->index(1);
+	moTriag->index(2);
+	moTriag->index(3);
+	moTriag->index(0);
+
+
+	moTriag->end();		
+
+	return moTriag;
+
+}
+
+
 class Example1 : public ExampleApplication
 {
 
@@ -546,88 +619,195 @@ public:
 
 
 		// Para la nave
+		// Creamos la textura del laser 
+		Ogre::MaterialPtr matShip = Ogre::MaterialManager::getSingleton().create(
+			"shipText", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 
-ManualObject* manual = mSceneMgr->createManualObject("manual");
-manual->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+		Ogre::TextureUnitState* shipTexture =
+			matShip ->getTechnique(0) ->getPass(0)->createTextureUnitState("usb_ship_mat.png");
+			//matShip ->getTechnique(0) ->setCullingMode( CULL_NONE );
+
+
+
+/*ManualObject* cabina01 = mSceneMgr->createManualObject("cabina01");
+cabina01->begin("shipText", RenderOperation::OT_LINE_STRIP);
  
 // define vertex position of index 0..3
 
 //2,125-0.5-0.5
 //sizq
-manual->position(-1.35f, 10, 0.5f);
-manual->position(-2.125f, 3, 0.5f);
-manual->position(-2.125f, -3, 0.5f);
+cabina01->position(-1.35f, 10, 0.5f);
+cabina01->normal(-1.35f, 10, 0.5f);
+cabina01->textureCoord(0,1);
+cabina01->position(-2.125f, 3, 1.5f);
+cabina01->normal(-2.125f, 3, 1.5f);
+cabina01->textureCoord(0,1);
+cabina01->position(-2.125f, -3, 1.5f);
+cabina01->normal(-2.125f, -3, 1.5f);
+cabina01->textureCoord(0,0);
 
 
 
-manual->position(-1.625f, -3, 0.0);
-manual->position( 1.625f, -3, 0.0);
-manual->position( 1.625f,  3, 0.0);
-manual->position(-1.625f,  3, 0.0);
+cabina01->position(-1.625f, -3, 3);
+cabina01->normal(-1.625f, -3, 3);
+cabina01->textureCoord(0,0);
+cabina01->position( 1.625f, -3, 3);
+cabina01->normal( 1.625f, -3, 3);
+cabina01->textureCoord(1,0);
+cabina01->position( 1.625f,  3, 3);
+cabina01->normal( 1.625f,  3, 3);
+cabina01->textureCoord(1,1);
+cabina01->position(-1.625f,  3, 3);
+cabina01->normal(-1.625f,  3, 3);
+cabina01->textureCoord(0,1);
 
 
 //pico
-manual->position( 1.125f,  10, 0.0);
-manual->position( -1.125f,  10, 0.0);
+cabina01->position( 1.125f,  10, 2);
+cabina01->normal( 1.125f,  10, 2);
+cabina01->textureCoord(0,1);
+cabina01->position( -1.125f,  10, 2);
+cabina01->normal( -1.125f,  10, 2);
+cabina01->textureCoord(1,1);
 
 
 //sder
-manual->position(1.35f, 10, 0.5f);
-manual->position(2.125f, 3, 0.5f);
-manual->position(2.125f, -3, 0.5f);
-
+cabina01->position(1.35f, 10, 0.5f);
+cabina01->normal(1.35f, 10, 0.5f);
+cabina01->textureCoord(0,1);
+cabina01->position(2.125f, 3, 1.5f);
+cabina01->normal(2.125f, 3, 1.5f);
+cabina01->textureCoord(0,1);
+cabina01->position(2.125f, -3, 1.5f);
+cabina01->normal(2.125f, -3, 1.5f);
+cabina01->textureCoord(0,1);
 
 
 
  
 // define usage of vertices by refering to the indexes
-manual->index(8);
-manual->index(0);
-manual->index(1);
-manual->index(6);
-manual->index(1);
-manual->index(2);
-manual->index(3);
-manual->index(6);
-manual->index(8);
-manual->index(6);
-manual->index(3);
-manual->index(4);
-manual->index(5);
-manual->index(6);
-manual->index(5);
-manual->index(7);
-manual->index(9);
-manual->index(10);
-manual->index(5);
-manual->index(10);
-manual->index(11);
-manual->index(4);
-manual->index(11);
-manual->index(10);
-manual->index(9);
-manual->index(7);
-manual->index(8);
-manual->index(6);
+cabina01->index(9);
+cabina01->index(7);
+cabina01->index(0);
+cabina01->index(8);
+cabina01->index(6);
+cabina01->index(1);
+cabina01->index(2);
+cabina01->index(3);
+cabina01->index(6);
+cabina01->index(4);
+cabina01->index(5);
+cabina01->index(6);
+cabina01->index(8);
+cabina01->index(5);
+cabina01->index(7);
+cabina01->index(9);
+cabina01->index(10);
+cabina01->index(5);
+cabina01->index(11);
+cabina01->index(4);
+cabina01->index(2);
+cabina01->index(3);
+
+
  
 
-manual->end();		
-/*//mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(manual);
+cabina01->end();		
+
+		SceneNode* nodeCabina = mSceneMgr->createSceneNode("shipCabina");
+		mSceneMgr->getRootSceneNode()->addChild(nodeCabina);
+		nodeCabina->attachObject(cabina01); */
 
 
-SceneNode* mySceneNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("mySceneNode");
- 
-// attach ManualObject
-mySceneNode->attachObject(manual);
- 
-// move it
-mySceneNode->setPosition(0, 10, 0);*/
 
-		SceneNode* nodeManual = mSceneMgr->createSceneNode("nodeManualMat");
-		mSceneMgr->getRootSceneNode()->addChild(nodeManual);
-		nodeManual->attachObject(manual);
-		//nodeManual->setScale(0.02, 0.02, 0.02);
+		//nodecabina01->setScale(0.02, 0.02, 0.02);
 
+		//Tapa arriba cabina
+	ManualObject* cabina010 = createTriangle(mSceneMgr,0.875f, 1.625f, 0.875f, 10, 10, 11, 1.5f, 0.5f, 0.5f, "cabina010MO", "shipText");
+		ManualObject* cabina09 = createPlane(mSceneMgr,1.375f, 2.125f, 1.625f, 0.875f, 2.5, 2.5, 10, 10, 3, 0.5f, 0.5f, 1.5f, "cabina09MO", "shipText");
+		ManualObject* cabina08 = createPlane(mSceneMgr,1.375f, 2.125f, 2.125f, 1.375f, -2.5, -2.5, 2.5, 2.5, 3, 0.5f, 0.5f, 3, "cabina08MO", "shipText");
+		ManualObject* cabina07 = createPlane(mSceneMgr,-2.125f, 2.125f, 1.375f, -1.375f, -2.5, -2.5, -2.5, -2.5, 0.5f, 0.5f, 3, 3, "cabina07MO", "shipText");
+		ManualObject* cabina06 = createPlane(mSceneMgr,-2.125f, -1.375f, -1.375f, -2.125f, -2.5, -2.5, 2.5, 2.5, 0.5f, 3, 3, 0.5f, "cabina06MO", "shipText");
+		ManualObject* cabina05 = createPlane(mSceneMgr,-2.125f, -1.375f, -0.875f, -1.625f, 2.5, 2.5, 10, 10, 0.5f, 3, 1.5f, 0.5f, "cabina04MO", "shipText");
+		ManualObject* cabina04 = createTriangle(mSceneMgr,-1.625f, -0.875f, -0.875f, 10, 10, 11, 0.5f, 1.5f, 0.5f, "cabina05MO", "shipText");
+		ManualObject* cabina03 = createPlane(mSceneMgr,-0.875f, 0.875f, 0.875f, -0.875f, 10, 10, 11, 11, 1.5f, 1.5f, 0.5f, 0.5f, "cabina03MO", "shipText");
+		ManualObject* cabina02 = createPlane(mSceneMgr,-1.375f, 1.375f, 0.875f, -0.875f, 2.5, 2.5, 10, 10, 3, 3, 1.5f, 1.5f, "cabina02MO", "shipText");
+		ManualObject* cabina01 = createPlane(mSceneMgr,-1.375f, 1.375f, 1.375f, -1.375f, -2.5, -2.5, 2.5, 2.5, 3, 3, 3, 3, "cabina01MO", "shipText");
+		SceneNode* nodeCabina01 = mSceneMgr->createSceneNode("nodeC01");
+		mSceneMgr->getRootSceneNode()->addChild(nodeCabina01);
+		nodeCabina01->attachObject(cabina01); 
+		nodeCabina01->attachObject(cabina02); 
+		nodeCabina01->attachObject(cabina03); 
+		nodeCabina01->attachObject(cabina04); 
+		nodeCabina01->attachObject(cabina05); 
+		nodeCabina01->attachObject(cabina06); 
+		nodeCabina01->attachObject(cabina07); 
+		nodeCabina01->attachObject(cabina08); 
+		nodeCabina01->attachObject(cabina09); 
+		nodeCabina01->attachObject(cabina010); 
+
+	    //TapaAbajo Cabina
+	ManualObject* cabina110 = createTriangle(mSceneMgr,0.875f, 1.625f, 0.875f, 10, 10, 11, 1.5f, 0.5f, 0.5f, "cabina110MO", "shipText");
+		ManualObject* cabina19 = createPlane(mSceneMgr,1.375f, 2.125f, 1.625f, 0.875f, 2.5, 2.5, 10, 10, 5, 0.5f, 0.5f, 1.5f, "cabina19MO", "shipText");
+		ManualObject* cabina18 = createPlane(mSceneMgr,1.375f, 2.125f, 2.125f, 1.375f, -2.5, -2.5, 2.5, 2.5, 5, 0.5f, 0.5f, 5, "cabina18MO", "shipText");
+		ManualObject* cabina17 = createPlane(mSceneMgr,-2.125f, 2.125f, 1.375f, -1.375f, -2.5, -2.5, -2.5, -2.5, 0.5f, 0.5f, 5, 5, "cabina17MO", "shipText");
+		ManualObject* cabina16 = createPlane(mSceneMgr,-2.125f, -1.375f, -1.375f, -2.125f, -2.5, -2.5, 2.5, 2.5, 0.5f, 5, 5, 0.5f, "cabina16MO", "shipText");
+		ManualObject* cabina15 = createPlane(mSceneMgr,-2.125f, -1.375f, -0.875f, -1.625f, 2.5, 2.5, 10, 10, 0.5f, 5, 1.5f, 0.5f, "cabina14MO", "shipText");
+		ManualObject* cabina14 = createTriangle(mSceneMgr,-1.625f, -0.875f, -0.875f, 10, 10, 11, 0.5f, 1.5f, 0.5f, "cabina15MO", "shipText");
+		ManualObject* cabina13 = createPlane(mSceneMgr,-0.875f, 0.875f, 0.875f, -0.875f, 10, 10, 11, 11, 1.5f, 1.5f, 0.5f, 0.5f, "cabina13MO", "shipText");
+		ManualObject* cabina12 = createPlane(mSceneMgr,-1.375f, 1.375f, 0.875f, -0.875f, 2.5, 2.5, 10, 10, 5, 5, 1.5f, 1.5f, "cabina12MO", "shipText");
+		ManualObject* cabina11 = createPlane(mSceneMgr,-1.375f, 1.375f, 1.375f, -1.375f, -2.5, -2.5, 2.5, 2.5, 5, 5, 5, 5, "cabina11MO", "shipText");
+		SceneNode* nodeCabina11 = nodeCabina01->createChildSceneNode();
+		nodeCabina11->attachObject(cabina11); 
+		nodeCabina11->attachObject(cabina12); 
+		nodeCabina11->attachObject(cabina13); 
+		nodeCabina11->attachObject(cabina14); 
+		nodeCabina11->attachObject(cabina15); 
+		nodeCabina11->attachObject(cabina16); 
+		nodeCabina11->attachObject(cabina17); 
+		nodeCabina11->attachObject(cabina18); 
+		nodeCabina11->attachObject(cabina19); 
+		nodeCabina11->attachObject(cabina110); 
+		nodeCabina11->setScale(1,1,-1);
+		nodeCabina11->setPosition(0,0,1);
+		//ManualObject* cabina02 = createPlane(mSceneMgr,-2.125f, -1.35f, -	1.35f, -2.125f, 3, 3, 10, 10, 0.5f, 1.5f, 1.5f, 0.5f, "cabina02MO", "shipText");
+
+
+		/* Ala derecha */
+		//-6.375f
+		//5.578125f
+		//2.921875f
+		//-2.72265625f
+		ManualObject* ala03 = createPlane(mSceneMgr,-2.72265625f, -1.8f, -1.8f, -2.72265625f, -1.8, -1.8, 1.5f, 1.5f, 1, 1, 1, 1, "ala03", "shipText");						
+		ManualObject* ala02 = createPlane(mSceneMgr,-2.921875f, -2.72265625f, -2.72265625f, -2.921875f, -2, -1.8, 1.5f, 1.5f, 1, 1, 1, 1, "ala02", "shipText"); 						
+		ManualObject* ala01 = createPlane(mSceneMgr,-8.5, -2.921875f, -2.921875f, -8.5, -1.5f, -2, 1.5f, 1.5f, 1, 1, 1, 1, "ala01", "shipText");
+
+		SceneNode* nodeAla01 = mSceneMgr->createSceneNode("nodeA01");
+		mSceneMgr->getRootSceneNode()->addChild(nodeAla01);
+		nodeAla01->attachObject(ala01); 
+		nodeAla01->attachObject(ala02); 
+		nodeAla01->attachObject(ala03); 
+
+
+		nodeCabina01->setPosition(0,0,0);
+
+
+		ManualObject* ala023 = createPlane(mSceneMgr,-2.72265625f, -1.8f, -1.8f, -2.72265625f, -1.8, -1.8, 1.5f, 1.5f, 1, 1, 1, 1, "ala023", "shipText");						
+		ManualObject* ala022 = createPlane(mSceneMgr,-2.921875f, -2.72265625f, -2.72265625f, -2.921875f, -2, -1.8, 1.5f, 1.5f, 1, 1, 1, 1, "ala022", "shipText"); 						
+		ManualObject* ala021 = createPlane(mSceneMgr,-8.5, -2.921875f, -2.921875f, -8.5, -1.5f, -2, 1.5f, 1.5f, 1, 1, 1, 1, "ala021", "shipText");
+
+		SceneNode* nodeAla02 = nodeAla01->createChildSceneNode("nodeA02");
+		nodeAla02->attachObject(ala021); 
+		nodeAla02->attachObject(ala022); 
+		nodeAla02->attachObject(ala023); 
+		nodeAla02->setScale(1,1,-1);
+		nodeAla02->setPosition(1,1,0.5f);
+		/*Ogre::Entity* test = mSceneMgr->createEntity("usb_planocurvo02.mesh");
+		test->setMaterial(matShip);
+		Ogre::SceneNode* nodeTest = mSceneMgr ->createSceneNode("nodeT");
+		mSceneMgr->getRootSceneNode()->addChild(nodeTest);
+		nodeTest->attachObject(test);
+		nodeTest->setPosition(0,0,0);*/
 		// Fin Nave
 	}
 
