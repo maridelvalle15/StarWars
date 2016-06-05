@@ -1,4 +1,17 @@
 #include "Ogre\ExampleApplication.h"
+#include "stdafx.h"
+
+Ogre::AnimationState* AnimacionLaser;
+
+class FrameListenerClase : public Ogre::FrameListener{
+
+public:
+	bool frameStarted(const Ogre::FrameEvent &evt){
+		AnimacionLaser->addTime(evt.timeSinceLastFrame);
+		return true;
+	}
+
+};
 
 class Example1 : public ExampleApplication
 {
@@ -109,33 +122,12 @@ public:
 		Ogre::Entity* entEscena12 = mSceneMgr->createEntity("usb_laser.mesh");
 		entEscena12->setMaterial(matLaser);
 		Ogre::SceneNode* nodeLaser = mSceneMgr ->createSceneNode("nodeLaser");
-		mSceneMgr->getRootSceneNode()->addChild(nodeLaser);
-		nodeTuboTorreta->attachObject(entEscena12);
-		nodeLaser->setScale(0.4,0.4,0.4);
-		nodeLaser->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,0,1)) , Ogre::Node::TransformSpace::TS_WORLD);
-		nodeLaser->translate(19,8.5,0);
-		
-		/*
-		Real duration=4.0;
-		Real step=duration/4.0;
-		Animation* animation = mSceneMgr->createAnimation("LightAnim",duration);
-		animation->setInterpolationMode(Animation::IM_SPLINE);
-		NodeAnimationTrack* track = animation->createNodeTrack(0,nodeLaser);
-
-		// Declare it so that it is accessible in a frame listener (e.g. as an object you pass to the frame listener)
-		AnimationState * mLightAnimationState;
-		// ...
-				mLightAnimationState = mSceneMgr->createAnimationState("LightAnim");
-				mLightAnimationState->setEnabled(true);
-				mLightAnimationState->setLoop(true);
-		
-		 bool frameStarted(const FrameEvent& evt)
-		{
-		mLightAnimationState->addTime(evt.timeSinceLastFrame);
- 
-		  return true;
-		}
-		*/
+		nodeTuboTorreta->addChild(nodeLaser);
+		nodeLaser->attachObject(entEscena12);
+		entEscena12->setCastShadows(false);
+		nodeLaser->setScale(0.7,0.2,0.4);
+		//nodeLaser->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,0,0)) , Ogre::Node::TransformSpace::TS_WORLD);
+		nodeLaser->setPosition(0,10,0);
 
 		// TORRETA 2
 
@@ -307,6 +299,54 @@ public:
 		nodeLaser4->setScale(0.4,0.4,0.4);
 		nodeLaser4->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,0,1)) , Ogre::Node::TransformSpace::TS_WORLD);
 		nodeLaser4->translate(19,8.5,0);
+
+		
+		//Create animacion del laser
+		float duration = 7.0;
+		Ogre::Animation* animationLaser = mSceneMgr->createAnimation("AnimLaser",duration);
+		animationLaser->setInterpolationMode(Animation::IM_SPLINE);
+
+		Ogre::NodeAnimationTrack* Lasertrack = animationLaser->createNodeTrack(0,nodeLaser);
+		Ogre::TransformKeyFrame* key;
+
+		key = Lasertrack->createNodeKeyFrame(0.0);
+		key->setTranslate(Vector3(0,10,0));  
+		key->setScale(Vector3(0.7,0.2,0.4));
+
+
+		key = Lasertrack->createNodeKeyFrame(1.0);
+		key->setTranslate(Vector3(0,20,1));
+		key->setScale(Vector3(0.7,0.2,0.4));
+
+		key = Lasertrack->createNodeKeyFrame(2.0);
+		key->setTranslate(Vector3(0,30,2));
+		key->setScale(Vector3(0.7,0.2,0.4));
+
+		key = Lasertrack->createNodeKeyFrame(3.0);
+		key->setTranslate(Vector3(0,40,3));
+		key->setScale(Vector3(0.7,0.2,0.4));
+
+		key = Lasertrack->createNodeKeyFrame(4.0);
+		key->setTranslate(Vector3(0,10,4));
+		key->setScale(Vector3(0.7,0.2,0.4));
+
+		key = Lasertrack->createNodeKeyFrame(5.0);
+		key->setTranslate(Vector3(0,10,5));
+		key->setScale(Vector3(0.7,0.2,0.4));
+
+		key = Lasertrack->createNodeKeyFrame(6.0);
+		key->setTranslate(Vector3(0,10,6));
+		key->setScale(Vector3(0.7,0.2,0.4));
+
+		key = Lasertrack->createNodeKeyFrame(7.0);
+		key->setTranslate(Vector3(0,10,7));
+		key->setScale(Vector3(0.7,0.2,0.4));
+
+		AnimacionLaser=mSceneMgr->createAnimationState("AnimLaser");
+		AnimacionLaser->setEnabled(true);
+		AnimacionLaser->setLoop(true);
+		
+		//mSceneMgr->setSkyBox(true, "matSkyBox", 300);
 
 	}
 
