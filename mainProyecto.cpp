@@ -2,6 +2,9 @@
 #include "stdafx.h"
 
 Ogre::AnimationState* AnimacionLaser;
+Ogre::AnimationState* AnimacionLaser2;
+Ogre::AnimationState* AnimacionLaser3;
+Ogre::AnimationState* AnimacionLaser4;
 float r=1.0;
 
 class FrameListenerClase : public Ogre::FrameListener{
@@ -71,6 +74,9 @@ public:
 
 
 		AnimacionLaser->addTime(evt.timeSinceLastFrame);
+		AnimacionLaser2->addTime(evt.timeSinceLastFrame);
+		AnimacionLaser3->addTime(evt.timeSinceLastFrame);
+		AnimacionLaser4->addTime(evt.timeSinceLastFrame);
 		return true;
 	}
 
@@ -151,6 +157,7 @@ public:
 		mSceneMgr->getRootSceneNode()->addChild(nodeTopeTorreta);
 		nodeTopeTorreta->attachObject(entEscena07);
 		//nodeTopeTorreta->attachObject(entEjeCabezaTorreta);
+		nodeTopeTorreta->rotate(Ogre::Quaternion(Ogre::Degree(315), Ogre::Vector3(0,1,0)) , Ogre::Node::TransformSpace::TS_WORLD);
 		nodeTopeTorreta->setPosition(-21.7,4.7,-227.4);
 		
 		// Cañon de la torreta
@@ -161,6 +168,7 @@ public:
 		nodeTuboTorreta->attachObject(entEscena11);
 		nodeTuboTorreta->setScale(0.5,1.0,0.5);
 		nodeTuboTorreta->rotate(Ogre::Quaternion(Ogre::Degree(-90), Ogre::Vector3(0,0,1)) , Ogre::Node::TransformSpace::TS_WORLD);
+		nodeTuboTorreta->rotate(Ogre::Quaternion(Ogre::Degree(315), Ogre::Vector3(0,1,0)) , Ogre::Node::TransformSpace::TS_WORLD);
 		nodeTuboTorreta->translate(6,1,0);
 
 		// Cuerpo de la torreta
@@ -209,6 +217,7 @@ public:
 		mSceneMgr->getRootSceneNode()->addChild(nodeTopeTorreta2);
 		nodeTopeTorreta2->attachObject(CabezaT2);
 		//nodeTopeTorreta->attachObject(entEjeCabezaTorreta);
+		nodeTopeTorreta2->rotate(Ogre::Quaternion(Ogre::Degree(45), Ogre::Vector3(0,1,0)) , Ogre::Node::TransformSpace::TS_WORLD);
 		nodeTopeTorreta2->setPosition(21.7,4.7,-408.0);
 		
 		// Cañon de la torreta
@@ -219,6 +228,7 @@ public:
 		nodeTuboTorreta2->attachObject(CanonT2);
 		nodeTuboTorreta2->setScale(0.5,1.0,0.5);
 		nodeTuboTorreta2->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,0,1)) , Ogre::Node::TransformSpace::TS_WORLD);
+		nodeTuboTorreta2->rotate(Ogre::Quaternion(Ogre::Degree(45), Ogre::Vector3(0,1,0)) , Ogre::Node::TransformSpace::TS_WORLD);
 		nodeTuboTorreta2->translate(-6,1,0);
 
 		// Cuerpo de la torreta
@@ -249,11 +259,11 @@ public:
 		Ogre::Entity* LaserT2 = mSceneMgr->createEntity("usb_laser.mesh");
 		LaserT2->setMaterial(matLaser);
 		Ogre::SceneNode* nodeLaser2 = mSceneMgr ->createSceneNode("nodeLaser2");
-		mSceneMgr->getRootSceneNode()->addChild(nodeLaser2);
-		nodeTuboTorreta2->attachObject(LaserT2);
-		nodeLaser2->setScale(0.4,0.4,0.4);
+		nodeTuboTorreta2->addChild(nodeLaser2);
+		nodeLaser2->attachObject(LaserT2);
+		nodeLaser2->setScale(0.7,0.2,0.4);
 		nodeLaser2->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,0,1)) , Ogre::Node::TransformSpace::TS_WORLD);
-		nodeLaser2->translate(19,8.5,0);
+		nodeLaser2->setPosition(0.7,0.2,0.4);
 
 		// TORRETA 3
 
@@ -306,11 +316,11 @@ public:
 		Ogre::Entity* LaserT3 = mSceneMgr->createEntity("usb_laser.mesh");
 		LaserT3->setMaterial(matLaser);
 		Ogre::SceneNode* nodeLaser3 = mSceneMgr ->createSceneNode("nodeLaser3");
-		mSceneMgr->getRootSceneNode()->addChild(nodeLaser3);
-		nodeTuboTorreta3->attachObject(LaserT3);
-		nodeLaser3->setScale(0.4,0.4,0.4);
+		nodeTuboTorreta3->addChild(nodeLaser3);
+		nodeLaser3->attachObject(LaserT3);
+		nodeLaser3->setScale(0.7,0.2,0.4);
 		nodeLaser3->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,0,1)) , Ogre::Node::TransformSpace::TS_WORLD);
-		nodeLaser3->translate(19,8.5,0);
+		nodeLaser3->translate(0,10,0);
 		
 		// TORRETA 4
 
@@ -363,14 +373,14 @@ public:
 		Ogre::Entity* LaserT4 = mSceneMgr->createEntity("usb_laser.mesh");
 		LaserT4->setMaterial(matLaser);
 		Ogre::SceneNode* nodeLaser4 = mSceneMgr ->createSceneNode("nodeLaser4");
-		mSceneMgr->getRootSceneNode()->addChild(nodeLaser4);
-		nodeTuboTorreta4->attachObject(LaserT4);
-		nodeLaser4->setScale(0.4,0.4,0.4);
+		nodeTuboTorreta4->addChild(nodeLaser4);
+		nodeLaser4->attachObject(LaserT4);
+		nodeLaser4->setScale(0.7,0.2,0.4);
 		nodeLaser4->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,0,1)) , Ogre::Node::TransformSpace::TS_WORLD);
-		nodeLaser4->translate(19,8.5,0);
+		nodeLaser4->translate(0,10,0);
 
 		
-		//Create animacion del laser
+		//Animacion del laser 1
 		float duration = 4.0;
 		Ogre::Animation* animationLaser = mSceneMgr->createAnimation("AnimLaser",duration);
 		animationLaser->setInterpolationMode(Animation::IM_SPLINE);
@@ -382,31 +392,149 @@ public:
 		key->setTranslate(Vector3(0,6.3f,0));
 		key->setScale(Vector3(2.0f,0.05f,2.0f));
 
-		key = LaserTrack->createNodeKeyFrame(0.4f);
-		key->setTranslate(Vector3(0,15,0));
+		key = LaserTrack->createNodeKeyFrame(0.9f);
+		key->setTranslate(Vector3(0,65,0));
 		key->setScale(Vector3(0.9f,0.2f,0.9f));
 		//key->setScale(Vector3(0.03,0.03,0.03));
 		//nodeLaser->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,0,0)) , Ogre::Node::TransformSpace::TS_WORLD);
 
-		key = LaserTrack->createNodeKeyFrame(1.0);
-		key->setTranslate(Vector3(0,48.5f,0));
+		key = LaserTrack->createNodeKeyFrame(1.3f);
+		//key->setTranslate(Vector3(0,48.5f,0));
+		key->setTranslate(Vector3(0,75,0));
 		key->setScale(Vector3(0.9f,0.2f,0.9f));
 		//key->setScale(Vector3(0.03,0.03,0.03));
 
-		key = LaserTrack->createNodeKeyFrame(1.4f);
-		key->setTranslate(Vector3(0,50.5,0));
+		key = LaserTrack->createNodeKeyFrame(2.0f);
+		//key->setTranslate(Vector3(0,50.5,0));
+		key->setTranslate(Vector3(0,77,0));
 		key->setScale(Vector3(8.0f,-0.3,8.0f));
 		//key->setScale(Vector3(0.03,0.03,0.03));
 
-		key = LaserTrack->createNodeKeyFrame(2.4f);
-		key->setTranslate(Vector3(0,55.5,0));
+		key = LaserTrack->createNodeKeyFrame(2.7f);
+		//key->setTranslate(Vector3(0,55.5,0));
+		key->setTranslate(Vector3(0,82,0));
 		key->setScale(Vector3(0,0,0));
 		//key->setScale(Vector3(0.03,0.03,0.03));
 
 		AnimacionLaser=mSceneMgr->createAnimationState("AnimLaser");
 		AnimacionLaser->setEnabled(true);
 		AnimacionLaser->setLoop(true);
+
+
+		//Animacion del laser 2
+		float duration2 = 4.0;
+		Ogre::Animation* animationLaser2 = mSceneMgr->createAnimation("AnimLaser2",duration2);
+		animationLaser2->setInterpolationMode(Animation::IM_SPLINE);
+
+		Ogre::NodeAnimationTrack* LaserTrack2 = animationLaser2->createNodeTrack(0,nodeLaser2);
+		Ogre::TransformKeyFrame* key2;
+
+		key2 = LaserTrack2->createNodeKeyFrame(0.0);
+		key2->setTranslate(Vector3(0,6.3f,0));
+		key2->setScale(Vector3(2.0f,0.05f,2.0f));
+
+		key2 = LaserTrack2->createNodeKeyFrame(0.9f);
+		key2->setTranslate(Vector3(0,65,0));
+		key2->setScale(Vector3(0.9f,0.2f,0.9f));
+		//key->setScale(Vector3(0.03,0.03,0.03));
+		//nodeLaser->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,0,0)) , Ogre::Node::TransformSpace::TS_WORLD);
+
+		key2 = LaserTrack2->createNodeKeyFrame(1.3f);
+		//key->setTranslate(Vector3(0,48.5f,0));
+		key2->setTranslate(Vector3(0,75,0));
+		key2->setScale(Vector3(0.9f,0.2f,0.9f));
+		//key->setScale(Vector3(0.03,0.03,0.03));
+
+		key2 = LaserTrack2->createNodeKeyFrame(2.0f);
+		//key->setTranslate(Vector3(0,50.5,0));
+		key2->setTranslate(Vector3(0,77,0));
+		key2->setScale(Vector3(8.0f,-0.3,8.0f));
+		//key->setScale(Vector3(0.03,0.03,0.03));
+
+		key2 = LaserTrack2->createNodeKeyFrame(2.7f);
+		//key->setTranslate(Vector3(0,55.5,0));
+		key2->setTranslate(Vector3(0,82,0));
+		key2->setScale(Vector3(0,0,0));
+		//key->setScale(Vector3(0.03,0.03,0.03));
+
+		AnimacionLaser2=mSceneMgr->createAnimationState("AnimLaser2");
+		AnimacionLaser2->setEnabled(true);
+		AnimacionLaser2->setLoop(true);
 		
+		//Animacion del laser 3
+		float duration3 = 4.0;
+		Ogre::Animation* animationLaser3 = mSceneMgr->createAnimation("AnimLaser3",duration3);
+		animationLaser3->setInterpolationMode(Animation::IM_SPLINE);
+
+		Ogre::NodeAnimationTrack* LaserTrack3 = animationLaser3->createNodeTrack(0,nodeLaser3);
+		Ogre::TransformKeyFrame* key3;
+
+		key3 = LaserTrack3->createNodeKeyFrame(0.0);
+		key3->setTranslate(Vector3(0,6.3f,0));
+		key3->setScale(Vector3(2.0f,0.05f,2.0f));
+
+		key3 = LaserTrack3->createNodeKeyFrame(0.4f);
+		key3->setTranslate(Vector3(0,15,0));
+		key3->setScale(Vector3(0.9f,0.2f,0.9f));
+		//key->setScale(Vector3(0.03,0.03,0.03));
+		//nodeLaser->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,0,0)) , Ogre::Node::TransformSpace::TS_WORLD);
+
+		key3 = LaserTrack3->createNodeKeyFrame(1.0);
+		key3->setTranslate(Vector3(0,48.5f,0));
+		key3->setScale(Vector3(0.9f,0.2f,0.9f));
+		//key->setScale(Vector3(0.03,0.03,0.03));
+
+		key3 = LaserTrack3->createNodeKeyFrame(1.4f);
+		key3->setTranslate(Vector3(0,50.5,0));
+		key3->setScale(Vector3(8.0f,-0.3,8.0f));
+		//key->setScale(Vector3(0.03,0.03,0.03));
+
+		key3 = LaserTrack3->createNodeKeyFrame(2.4f);
+		key3->setTranslate(Vector3(0,55.5,0));
+		key3->setScale(Vector3(0,0,0));
+		//key->setScale(Vector3(0.03,0.03,0.03));
+
+		AnimacionLaser3=mSceneMgr->createAnimationState("AnimLaser3");
+		AnimacionLaser3->setEnabled(true);
+		AnimacionLaser3->setLoop(true);
+
+		//Animacion del laser 4
+		float duration4 = 4.0;
+		Ogre::Animation* animationLaser4 = mSceneMgr->createAnimation("AnimLaser4",duration4);
+		animationLaser4->setInterpolationMode(Animation::IM_SPLINE);
+
+		Ogre::NodeAnimationTrack* LaserTrack4 = animationLaser4->createNodeTrack(0,nodeLaser4);
+		Ogre::TransformKeyFrame* key4;
+
+		key4 = LaserTrack4->createNodeKeyFrame(0.0);
+		key4->setTranslate(Vector3(0,6.3f,0));
+		key4->setScale(Vector3(2.0f,0.05f,2.0f));
+
+		key4 = LaserTrack4->createNodeKeyFrame(0.4f);
+		key4->setTranslate(Vector3(0,15,0));
+		key4->setScale(Vector3(0.9f,0.2f,0.9f));
+		//key->setScale(Vector3(0.03,0.03,0.03));
+		//nodeLaser->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,0,0)) , Ogre::Node::TransformSpace::TS_WORLD);
+
+		key4 = LaserTrack4->createNodeKeyFrame(1.0);
+		key4->setTranslate(Vector3(0,48.5f,0));
+		key4->setScale(Vector3(0.9f,0.2f,0.9f));
+		//key->setScale(Vector3(0.03,0.03,0.03));
+
+		key4 = LaserTrack4->createNodeKeyFrame(1.4f);
+		key4->setTranslate(Vector3(0,50.5,0));
+		key4->setScale(Vector3(8.0f,-0.3,8.0f));
+		//key->setScale(Vector3(0.03,0.03,0.03));
+
+		key4 = LaserTrack4->createNodeKeyFrame(2.4f);
+		key4->setTranslate(Vector3(0,55.5,0));
+		key4->setScale(Vector3(0,0,0));
+		//key->setScale(Vector3(0.03,0.03,0.03));
+
+		AnimacionLaser4=mSceneMgr->createAnimationState("AnimLaser4");
+		AnimacionLaser4->setEnabled(true);
+		AnimacionLaser4->setLoop(true);
+
 		//mSceneMgr->setSkyBox(true, "matSkyBox", 300);
 
 
