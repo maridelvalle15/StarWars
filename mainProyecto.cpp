@@ -2,6 +2,7 @@
 #include "stdafx.h"
 
 Ogre::AnimationState* AnimacionLaser;
+float r=1.0;
 
 class FrameListenerClase : public Ogre::FrameListener{
 private:
@@ -15,18 +16,19 @@ public:
 		size_t windowHnd = 0;
 		std::stringstream windowHndStr;
 		win->getCustomAttribute("WINDOW",&windowHnd);
-		//windowHndStr << windowHnd;
+		windowHndStr << windowHnd;
 
-		/*OIS::ParamList pl;
-		pl.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str())); */
+		OIS::ParamList pl;
+		pl.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str())); 
 
-		/*_key= static_cast<OIS::Keyboard*>(_man->createInputObject(OIS::OISKeyboard,false));
-		_mouse= static_cast<OIS::Mouse*>(_man->createInputObject(OIS::OISMouse,false));*/
+		_man = OIS::InputManager::createInputSystem(pl);
+		_key= static_cast<OIS::Keyboard*>(_man->createInputObject(OIS::OISKeyboard,false));
+		_mouse= static_cast<OIS::Mouse*>(_man->createInputObject(OIS::OISMouse,false));
 		_cam = cam;
 	}
 
 	bool frameStarted(const Ogre::FrameEvent &evt){
-		/*_key->capture();
+		_key->capture();
 		_mouse->capture();
 
 
@@ -44,10 +46,10 @@ public:
 			tcam += Ogre::Vector3(0,0,10);
 
 		if(_key->isKeyDown(OIS::KC_A))
-			tcam += Ogre::Vector3(10,0,0);
+			tcam += Ogre::Vector3(-10,0,0);
 
 		if(_key->isKeyDown(OIS::KC_D))
-			tcam += Ogre::Vector3(-10,0,0);
+			tcam += Ogre::Vector3(10,0,0);
 
 		if(_key->isKeyDown(OIS::KC_K))
 			tmov += Ogre::Vector3(20,0,0);
@@ -65,7 +67,7 @@ public:
 		float rotY =_mouse->getMouseState().Y.rel * evt.timeSinceLastFrame *-1;
 		_cam->yaw(Ogre::Radian(rotX));
 		_cam->pitch(Ogre::Radian(rotY));
-		_cam->moveRelative(tcam*movSpeed*evt.timeSinceLastFrame);*/
+		_cam->moveRelative(tcam*movSpeed*evt.timeSinceLastFrame);
 
 
 		AnimacionLaser->addTime(evt.timeSinceLastFrame);
@@ -101,10 +103,10 @@ public:
 		mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 		
 		// Inicializacion de la escena
-		Ogre::Entity* ent01 = mSceneMgr->createEntity("MyEntity1","ejes01.mesh");
+		/*Ogre::Entity* ent01 = mSceneMgr->createEntity("MyEntity1","ejes01.mesh");
 		Ogre::SceneNode* node01 = mSceneMgr->createSceneNode("Node01");
 		mSceneMgr->getRootSceneNode()->addChild(node01);
-		node01->attachObject(ent01);
+		node01->attachObject(ent01);*/
 		
 
 		Ogre::Entity* entEscena01 = mSceneMgr->createEntity("ogre_base01.mesh");
@@ -377,14 +379,28 @@ public:
 		Ogre::TransformKeyFrame* key;
 
 		key = LaserTrack->createNodeKeyFrame(0.0);
-		key->setTranslate(Vector3(0,10,0));
-		key->setScale(Vector3(0.7,0.2,0.4));
+		key->setTranslate(Vector3(0,6.3f,0));
+		key->setScale(Vector3(2.0f,0.05f,2.0f));
+
+		key = LaserTrack->createNodeKeyFrame(0.4f);
+		key->setTranslate(Vector3(0,15,0));
+		key->setScale(Vector3(0.9f,0.2f,0.9f));
 		//key->setScale(Vector3(0.03,0.03,0.03));
 		//nodeLaser->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,0,0)) , Ogre::Node::TransformSpace::TS_WORLD);
 
+		key = LaserTrack->createNodeKeyFrame(1.0);
+		key->setTranslate(Vector3(0,48.5f,0));
+		key->setScale(Vector3(0.9f,0.2f,0.9f));
+		//key->setScale(Vector3(0.03,0.03,0.03));
 
-		key = LaserTrack->createNodeKeyFrame(4.0);
-		key->setTranslate(Vector3(0,30,0));
+		key = LaserTrack->createNodeKeyFrame(1.4f);
+		key->setTranslate(Vector3(0,50.5,0));
+		key->setScale(Vector3(8.0f,-0.3,8.0f));
+		//key->setScale(Vector3(0.03,0.03,0.03));
+
+		key = LaserTrack->createNodeKeyFrame(2.4f);
+		key->setTranslate(Vector3(0,55.5,0));
+		key->setScale(Vector3(0,0,0));
 		//key->setScale(Vector3(0.03,0.03,0.03));
 
 		AnimacionLaser=mSceneMgr->createAnimationState("AnimLaser");
@@ -393,6 +409,98 @@ public:
 		
 		//mSceneMgr->setSkyBox(true, "matSkyBox", 300);
 
+
+
+
+
+
+
+
+
+		// Para la nave
+
+ManualObject* manual = mSceneMgr->createManualObject("manual");
+manual->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+ 
+// define vertex position of index 0..3
+
+//2,125-0.5-0.5
+//sizq
+manual->position(-1.35f, 10, 0.5f);
+manual->position(-2.125f, 3, 0.5f);
+manual->position(-2.125f, -3, 0.5f);
+
+
+
+manual->position(-1.625f, -3, 0.0);
+manual->position( 1.625f, -3, 0.0);
+manual->position( 1.625f,  3, 0.0);
+manual->position(-1.625f,  3, 0.0);
+
+
+//pico
+manual->position( 1.125f,  10, 0.0);
+manual->position( -1.125f,  10, 0.0);
+
+
+//sder
+manual->position(1.35f, 10, 0.5f);
+manual->position(2.125f, 3, 0.5f);
+manual->position(2.125f, -3, 0.5f);
+
+
+
+
+ 
+// define usage of vertices by refering to the indexes
+manual->index(8);
+manual->index(0);
+manual->index(1);
+manual->index(6);
+manual->index(1);
+manual->index(2);
+manual->index(3);
+manual->index(6);
+manual->index(8);
+manual->index(6);
+manual->index(3);
+manual->index(4);
+manual->index(5);
+manual->index(6);
+manual->index(5);
+manual->index(7);
+manual->index(9);
+manual->index(10);
+manual->index(5);
+manual->index(10);
+manual->index(11);
+manual->index(4);
+manual->index(11);
+manual->index(10);
+manual->index(9);
+manual->index(7);
+manual->index(8);
+manual->index(6);
+ 
+
+manual->end();		
+/*//mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(manual);
+
+
+SceneNode* mySceneNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("mySceneNode");
+ 
+// attach ManualObject
+mySceneNode->attachObject(manual);
+ 
+// move it
+mySceneNode->setPosition(0, 10, 0);*/
+
+		SceneNode* nodeManual = mSceneMgr->createSceneNode("nodeManualMat");
+		mSceneMgr->getRootSceneNode()->addChild(nodeManual);
+		nodeManual->attachObject(manual);
+		//nodeManual->setScale(0.02, 0.02, 0.02);
+
+		// Fin Nave
 	}
 
 };
