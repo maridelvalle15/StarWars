@@ -786,7 +786,7 @@ cabina01->end();
 		cabinaDodecae01->setMaterial(matShip);
 		Ogre::SceneNode* nodeDodecae01 = nodeCabina01 ->createChildSceneNode();
 		nodeDodecae01->attachObject(cabinaDodecae01);
-		nodeDodecae01->setPosition(0,1.2	f,2.5f);
+		nodeDodecae01->setPosition(0,1.2f,2.5f);
 		nodeDodecae01->setScale(0.2f,0.2f,0.2f);
 
 	    //TapaAbajo Cabina
