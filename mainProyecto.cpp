@@ -1,6 +1,14 @@
 #include "Ogre\ExampleApplication.h"
 #include "stdafx.h"
 
+/* Proyecto 4 - Computación Gráfica
+Abr-Jul 2016
+Ultima modificación: 05/06/16
+autores:
+Marisela Del Valle 11-10267
+Nabil J. Marquez   11-10683
+*/
+
 Ogre::AnimationState* AnimacionLaser;
 Ogre::AnimationState* AnimacionLaser2;
 Ogre::AnimationState* AnimacionLaser3;
@@ -9,13 +17,15 @@ float r=1.0;
 
 class FrameListenerClase : public Ogre::FrameListener{
 private:
+	Ogre::SceneNode* _nodoF01;
+	
 	OIS::InputManager* _man;
 	Ogre::Camera* _cam;
 	OIS::Keyboard* _key;
 	OIS::Mouse* _mouse;
 
 public:
-	FrameListenerClase( Ogre::Camera* cam,  RenderWindow* win){
+	FrameListenerClase(Ogre::SceneNode* nodo01, Ogre::Camera* cam,  RenderWindow* win){
 		size_t windowHnd = 0;
 		std::stringstream windowHndStr;
 		win->getCustomAttribute("WINDOW",&windowHnd);
@@ -28,51 +38,63 @@ public:
 		_key= static_cast<OIS::Keyboard*>(_man->createInputObject(OIS::OISKeyboard,false));
 		_mouse= static_cast<OIS::Mouse*>(_man->createInputObject(OIS::OISMouse,false));
 		_cam = cam;
+
+		_nodoF01 = nodo01;
+		
+	}
+
+	~FrameListenerClase(){
+		_man->destroyInputObject(_key);
+		_man->destroyInputObject(_mouse);
+		OIS::InputManager::destroyInputSystem(_man);
 	}
 
 	bool frameStarted(const Ogre::FrameEvent &evt){
 		_key->capture();
 		_mouse->capture();
 
-
+		// Inicializamos las variables para el movimiento
 		float movSpeed = 10.0f;
 		Ogre::Vector3 tmov(0,0,0);
 		Ogre::Vector3 tcam(0,0,0);
+		float rot = 0.0;
 
 		if(_key->isKeyDown(OIS::KC_ESCAPE))
 			return false;
-		
+		// La nave se mueve hacia el frente
 		if(_key->isKeyDown(OIS::KC_W))
 			tcam += Ogre::Vector3(0,0,-10);
-
-		if(_key->isKeyDown(OIS::KC_S))
-			tcam += Ogre::Vector3(0,0,10);
-
-		if(_key->isKeyDown(OIS::KC_A))
-			tcam += Ogre::Vector3(-10,0,0);
-
-		if(_key->isKeyDown(OIS::KC_D))
-			tcam += Ogre::Vector3(10,0,0);
-
-		if(_key->isKeyDown(OIS::KC_K))
-			tmov += Ogre::Vector3(20,0,0);
-
-		if(_key->isKeyDown(OIS::KC_H))
-			tmov += Ogre::Vector3(-20,0,0);
-
-		if(_key->isKeyDown(OIS::KC_U))
-			tmov += Ogre::Vector3(0,0,20);
-
-		if(_key->isKeyDown(OIS::KC_J))
-			tmov += Ogre::Vector3(0,0,-20);
-
-		float rotX =_mouse->getMouseState().X.rel * evt.timeSinceLastFrame *-1;
-		float rotY =_mouse->getMouseState().Y.rel * evt.timeSinceLastFrame *-1;
-		_cam->yaw(Ogre::Radian(rotX));
-		_cam->pitch(Ogre::Radian(rotY));
+		// Chequeamos los limites para movimiento lateral de la nave
+		if (_nodoF01->getPosition().x > -29 && _nodoF01->getPosition().y > -10){
+			if(_key->isKeyDown(OIS::KC_A)){
+				rot = 15.0;
+				tcam += Ogre::Vector3(-10,0,0);
+			}
+		}
+		// Chequeamos los limites para movimiento lateral de la nave
+		if (_nodoF01->getPosition().x < 29 && _nodoF01->getPosition().y > -10){
+			if(_key->isKeyDown(OIS::KC_D)){
+				rot = -15.0;
+				tcam += Ogre::Vector3(10,0,0);
+			}
+		}
+		// Movimiento de la camara junto con la nave
 		_cam->moveRelative(tcam*movSpeed*evt.timeSinceLastFrame);
-
-
+		// Si la nave llega al final, reinicia a la posicion inicial
+		if (_nodoF01->getPosition().z <= -1300){
+			tcam = Ogre::Vector3(0,0,0);
+			_cam->setPosition(0,8,50);
+			_cam->lookAt(0,8,0);
+			_nodoF01->setPosition(0,0,0);
+			float nuevo = -rot;
+			_nodoF01->setOrientation(Quaternion());
+			rot = 0.0;
+		}
+		// Movimiento y rotacion de la nave de acuerdo a las teclas presionadas
+		_nodoF01->translate(tcam *movSpeed* evt.timeSinceLastFrame);
+		_nodoF01->rotate(Ogre::Quaternion(Ogre::Degree(rot*movSpeed* evt.timeSinceLastFrame), Ogre::Vector3(0,0,1)) , Ogre::Node::TransformSpace::TS_WORLD);
+		
+		// Activa animacion del laser de cada torreta
 		AnimacionLaser->addTime(evt.timeSinceLastFrame);
 		AnimacionLaser2->addTime(evt.timeSinceLastFrame);
 		AnimacionLaser3->addTime(evt.timeSinceLastFrame);
@@ -81,7 +103,6 @@ public:
 	}
 
 };
-
 
 ManualObject* createPlane(SceneManager* mSceneMgr, float x00, float x10, float x11, float x01, float y00, float y10, float y11, float y01, float z00, float z10, float z11, float z01, String name, String matN){
 
@@ -154,24 +175,34 @@ ManualObject* createTriangle(SceneManager* mSceneMgr, float x00, float x10, floa
 
 }
 
-
 class Example1 : public ExampleApplication
 {
 
 public:
+	Ogre::SceneNode* nodeCabina01;
+	Ogre::FrameListener* FrameListener01;
+
+	Example1(){
+		FrameListener01 = NULL;
+	}
+
+	~Example1(){
+		if (FrameListener01){
+			delete FrameListener01;
+		}
+	}
+
+	void createFrameListener(){
+		FrameListener01 = new FrameListenerClase(nodeCabina01,mCamera,mWindow);
+		mRoot->addFrameListener(FrameListener01);
+	}
 
 	void createCamera() {
 
 		mCamera = mSceneMgr->createCamera("MyCamera1");
-		mCamera->setPosition(0,10,50);
-		mCamera->lookAt(0,0,-50);
+		mCamera->setPosition(0,8,50);
+		mCamera->lookAt(0,8,0);
 		mCamera->setNearClipDistance(5);
-
-	}
-
-	void createFrameListener(){
-		Ogre::FrameListener* FrameListener01 = new FrameListenerClase(mCamera,mWindow);
-		mRoot->addFrameListener(FrameListener01);
 
 	}
 
@@ -181,13 +212,6 @@ public:
 		mSceneMgr->setAmbientLight(Ogre::ColourValue(1.0, 1.0, 1.0));
 		mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 		
-		// Inicializacion de la escena
-		/*Ogre::Entity* ent01 = mSceneMgr->createEntity("MyEntity1","ejes01.mesh");
-		Ogre::SceneNode* node01 = mSceneMgr->createSceneNode("Node01");
-		mSceneMgr->getRootSceneNode()->addChild(node01);
-		node01->attachObject(ent01);*/
-		
-
 		Ogre::Entity* entEscena01 = mSceneMgr->createEntity("ogre_base01.mesh");
 		mSceneMgr->getRootSceneNode()->attachObject(entEscena01);
 
@@ -219,17 +243,23 @@ public:
 		Ogre::TextureUnitState* laserTexture =
 			matLaser ->getTechnique(0) ->getPass(0)->createTextureUnitState("nm_rt.png");
 		
+		/*
+		//OBJETO EJEMPLO PARA MOVER
+		entEjemplo = mSceneMgr->createEntity("usb_cubomod01.mesh");
+		entEjemplo->setMaterial(matLaser);
+		nodeEjemplo = mSceneMgr ->createSceneNode("nodeEjemplo");
+		mSceneMgr->getRootSceneNode()->addChild(nodeEjemplo);
+		nodeEjemplo->attachObject(entEjemplo);
+		nodeEjemplo->setPosition(0,0,0);
+		*/
 		// TORRETA 1
 
 		// Creamos la cabeza de la torreta junto con su eje y le agregamos textura
-		//Ogre::Entity* entEjeCabezaTorreta = mSceneMgr ->createEntity("ejes01.mesh");
 		Ogre::Entity* entEscena07 = mSceneMgr->createEntity("usb_cubomod01.mesh");
 		entEscena07->setMaterial(mat);
 		Ogre::SceneNode* nodeTopeTorreta = mSceneMgr ->createSceneNode("nodeTopeTorreta");
-		// Posicionamos la cabeza de la torreta
 		mSceneMgr->getRootSceneNode()->addChild(nodeTopeTorreta);
 		nodeTopeTorreta->attachObject(entEscena07);
-		//nodeTopeTorreta->attachObject(entEjeCabezaTorreta);
 		nodeTopeTorreta->rotate(Ogre::Quaternion(Ogre::Degree(315), Ogre::Vector3(0,1,0)) , Ogre::Node::TransformSpace::TS_WORLD);
 		nodeTopeTorreta->setPosition(-21.7,4.7,-227.4);
 		
@@ -276,7 +306,6 @@ public:
 		nodeLaser->attachObject(entEscena12);
 		entEscena12->setCastShadows(false);
 		nodeLaser->setScale(0.7,0.2,0.4);
-		//nodeLaser->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,0,0)) , Ogre::Node::TransformSpace::TS_WORLD);
 		nodeLaser->setPosition(0,10,0);
 		
 		/* LUZ QUE NO SIRVE
@@ -291,14 +320,11 @@ public:
 		// TORRETA 2
 
 		// Creamos la cabeza de la torreta junto con su eje y le agregamos textura
-		//Ogre::Entity* entEjeCabezaTorreta = mSceneMgr ->createEntity("ejes01.mesh");
 		Ogre::Entity* CabezaT2 = mSceneMgr->createEntity("usb_cubomod01.mesh");
 		CabezaT2->setMaterial(mat);
 		Ogre::SceneNode* nodeTopeTorreta2 = mSceneMgr ->createSceneNode("nodeTopeTorreta2");
-		// Posicionamos la cabeza de la torreta
 		mSceneMgr->getRootSceneNode()->addChild(nodeTopeTorreta2);
 		nodeTopeTorreta2->attachObject(CabezaT2);
-		//nodeTopeTorreta->attachObject(entEjeCabezaTorreta);
 		nodeTopeTorreta2->rotate(Ogre::Quaternion(Ogre::Degree(45), Ogre::Vector3(0,1,0)) , Ogre::Node::TransformSpace::TS_WORLD);
 		nodeTopeTorreta2->setPosition(21.7,4.7,-408.0);
 		
@@ -350,14 +376,11 @@ public:
 		// TORRETA 3
 
 		// Creamos la cabeza de la torreta junto con su eje y le agregamos textura
-		//Ogre::Entity* entEjeCabezaTorreta = mSceneMgr ->createEntity("ejes01.mesh");
 		Ogre::Entity* CabezaT3 = mSceneMgr->createEntity("usb_cubomod01.mesh");
 		CabezaT3->setMaterial(mat);
 		Ogre::SceneNode* nodeTopeTorreta3 = mSceneMgr ->createSceneNode("nodeTopeTorreta3");
-		// Posicionamos la cabeza de la torreta
 		mSceneMgr->getRootSceneNode()->addChild(nodeTopeTorreta3);
 		nodeTopeTorreta3->attachObject(CabezaT3);
-		//nodeTopeTorreta->attachObject(entEjeCabezaTorreta);
 		nodeTopeTorreta3->rotate(Ogre::Quaternion(Ogre::Degree(315), Ogre::Vector3(0,1,0)) , Ogre::Node::TransformSpace::TS_WORLD);
 		nodeTopeTorreta3->setPosition(-22.7,4.7,-637.4);
 		
@@ -409,14 +432,11 @@ public:
 		// TORRETA 4
 
 		// Creamos la cabeza de la torreta junto con su eje y le agregamos textura
-		//Ogre::Entity* entEjeCabezaTorreta = mSceneMgr ->createEntity("ejes01.mesh");
 		Ogre::Entity* CabezaT4 = mSceneMgr->createEntity("usb_cubomod01.mesh");
 		CabezaT4->setMaterial(mat);
 		Ogre::SceneNode* nodeTopeTorreta4 = mSceneMgr ->createSceneNode("nodeTopeTorreta4");
-		// Posicionamos la cabeza de la torreta
 		mSceneMgr->getRootSceneNode()->addChild(nodeTopeTorreta4);
 		nodeTopeTorreta4->attachObject(CabezaT4);
-		//nodeTopeTorreta->attachObject(entEjeCabezaTorreta);
 		nodeTopeTorreta4->rotate(Ogre::Quaternion(Ogre::Degree(45), Ogre::Vector3(0,1,0)) , Ogre::Node::TransformSpace::TS_WORLD);
 		nodeTopeTorreta4->setPosition(21.7,4.7,-882.8);
 		
@@ -481,26 +501,18 @@ public:
 		key = LaserTrack->createNodeKeyFrame(0.9f);
 		key->setTranslate(Vector3(0,65,0));
 		key->setScale(Vector3(0.9f,0.2f,0.9f));
-		//key->setScale(Vector3(0.03,0.03,0.03));
-		//nodeLaser->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,0,0)) , Ogre::Node::TransformSpace::TS_WORLD);
 
 		key = LaserTrack->createNodeKeyFrame(1.3f);
-		//key->setTranslate(Vector3(0,48.5f,0));
 		key->setTranslate(Vector3(0,75,0));
 		key->setScale(Vector3(0.9f,0.2f,0.9f));
-		//key->setScale(Vector3(0.03,0.03,0.03));
 
 		key = LaserTrack->createNodeKeyFrame(2.0f);
-		//key->setTranslate(Vector3(0,50.5,0));
 		key->setTranslate(Vector3(0,77,0));
 		key->setScale(Vector3(8.0f,-0.3,8.0f));
-		//key->setScale(Vector3(0.03,0.03,0.03));
 
 		key = LaserTrack->createNodeKeyFrame(2.7f);
-		//key->setTranslate(Vector3(0,55.5,0));
 		key->setTranslate(Vector3(0,82,0));
 		key->setScale(Vector3(0,0,0));
-		//key->setScale(Vector3(0.03,0.03,0.03));
 
 		AnimacionLaser=mSceneMgr->createAnimationState("AnimLaser");
 		AnimacionLaser->setEnabled(true);
@@ -522,26 +534,18 @@ public:
 		key2 = LaserTrack2->createNodeKeyFrame(0.9f);
 		key2->setTranslate(Vector3(0,65,0));
 		key2->setScale(Vector3(0.9f,0.2f,0.9f));
-		//key->setScale(Vector3(0.03,0.03,0.03));
-		//nodeLaser->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,0,0)) , Ogre::Node::TransformSpace::TS_WORLD);
 
 		key2 = LaserTrack2->createNodeKeyFrame(1.3f);
-		//key->setTranslate(Vector3(0,48.5f,0));
 		key2->setTranslate(Vector3(0,75,0));
 		key2->setScale(Vector3(0.9f,0.2f,0.9f));
-		//key->setScale(Vector3(0.03,0.03,0.03));
 
 		key2 = LaserTrack2->createNodeKeyFrame(2.0f);
-		//key->setTranslate(Vector3(0,50.5,0));
 		key2->setTranslate(Vector3(0,77,0));
 		key2->setScale(Vector3(8.0f,-0.3,8.0f));
-		//key->setScale(Vector3(0.03,0.03,0.03));
 
 		key2 = LaserTrack2->createNodeKeyFrame(2.7f);
-		//key->setTranslate(Vector3(0,55.5,0));
 		key2->setTranslate(Vector3(0,82,0));
 		key2->setScale(Vector3(0,0,0));
-		//key->setScale(Vector3(0.03,0.03,0.03));
 
 		AnimacionLaser2=mSceneMgr->createAnimationState("AnimLaser2");
 		AnimacionLaser2->setEnabled(true);
@@ -562,23 +566,16 @@ public:
 		key3 = LaserTrack3->createNodeKeyFrame(0.9f);
 		key3->setTranslate(Vector3(0,65,0));
 		key3->setScale(Vector3(0.9f,0.2f,0.9f));
-		//key->setScale(Vector3(0.03,0.03,0.03));
-		//nodeLaser->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,0,0)) , Ogre::Node::TransformSpace::TS_WORLD);
 
 		key3 = LaserTrack3->createNodeKeyFrame(1.3f);
-		//key->setTranslate(Vector3(0,48.5f,0));
 		key3->setTranslate(Vector3(0,75,0));
 		key3->setScale(Vector3(0.9f,0.2f,0.9f));
-		//key->setScale(Vector3(0.03,0.03,0.03));
 
 		key3 = LaserTrack3->createNodeKeyFrame(2.0f);
-		//key->setTranslate(Vector3(0,50.5,0));
 		key3->setTranslate(Vector3(0,77,0));
 		key3->setScale(Vector3(8.0f,-0.3,8.0f));
-		//key->setScale(Vector3(0.03,0.03,0.03));
 
 		key3 = LaserTrack3->createNodeKeyFrame(2.7f);
-		//key->setTranslate(Vector3(0,55.5,0));
 		key3->setTranslate(Vector3(0,82,0));
 		key3->setScale(Vector3(0,0,0));
 
@@ -601,30 +598,23 @@ public:
 		key4 = LaserTrack4->createNodeKeyFrame(0.9f);
 		key4->setTranslate(Vector3(0,65,0));
 		key4->setScale(Vector3(0.9f,0.2f,0.9f));
-		//key->setScale(Vector3(0.03,0.03,0.03));
-		//nodeLaser->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,0,0)) , Ogre::Node::TransformSpace::TS_WORLD);
 
 		key4 = LaserTrack4->createNodeKeyFrame(1.3f);
-		//key->setTranslate(Vector3(0,48.5f,0));
 		key4->setTranslate(Vector3(0,75,0));
 		key4->setScale(Vector3(0.9f,0.2f,0.9f));
-		//key->setScale(Vector3(0.03,0.03,0.03));
 
 		key4 = LaserTrack4->createNodeKeyFrame(2.0f);
-		//key->setTranslate(Vector3(0,50.5,0));
 		key4->setTranslate(Vector3(0,77,0));
 		key4->setScale(Vector3(8.0f,-0.3,8.0f));
-		//key->setScale(Vector3(0.03,0.03,0.03));
 
 		key4 = LaserTrack4->createNodeKeyFrame(2.7f);
-		//key->setTranslate(Vector3(0,55.5,0));
 		key4->setTranslate(Vector3(0,82,0));
 		key4->setScale(Vector3(0,0,0));
 
 		AnimacionLaser4=mSceneMgr->createAnimationState("AnimLaser4");
 		AnimacionLaser4->setEnabled(true);
 		AnimacionLaser4->setLoop(true);
-
+		// Fondo estrellado
 		mSceneMgr->setSkyBox(true, "matSkyBox", 300);
 
 
@@ -769,7 +759,7 @@ cabina01->end();
 		ManualObject* cabina03 = createPlane(mSceneMgr,-0.875f, 0.875f, 0.875f, -0.875f, 10, 10, 11, 11, 1.5f, 1.5f, 0.5f, 0.5f, "cabina03MO", "shipText");
 		ManualObject* cabina02 = createPlane(mSceneMgr,-1.375f, 1.375f, 0.875f, -0.875f, 2.5, 2.5, 10, 10, 3, 3, 1.5f, 1.5f, "cabina02MO", "shipText");
 		ManualObject* cabina01 = createPlane(mSceneMgr,-1.375f, 1.375f, 1.375f, -1.375f, -2.5, -2.5, 2.5, 2.5, 3, 3, 3, 3, "cabina01MO", "shipText");
-		SceneNode* nodeCabina01 = mSceneMgr->createSceneNode("nodeC01");
+		nodeCabina01 = mSceneMgr->createSceneNode("nodeC01");
 		mSceneMgr->getRootSceneNode()->addChild(nodeCabina01);
 		nodeCabina01->attachObject(cabina01); 
 		nodeCabina01->attachObject(cabina02); 
@@ -781,6 +771,7 @@ cabina01->end();
 		nodeCabina01->attachObject(cabina08); 
 		nodeCabina01->attachObject(cabina09); 
 		nodeCabina01->attachObject(cabina010); 
+		nodeCabina01->rotate(Ogre::Quaternion(Ogre::Degree(270), Ogre::Vector3(1,0,0)) , Ogre::Node::TransformSpace::TS_WORLD);
 
 		Ogre::Entity* cabinaCubEnto01 = mSceneMgr->createEntity("usb_cubomod01.mesh");
 		cabinaCubEnto01->setMaterial(matCabina);
