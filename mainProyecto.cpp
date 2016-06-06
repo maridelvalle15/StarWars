@@ -657,7 +657,14 @@ public:
 		Ogre::TextureUnitState* cabinaTexture =
 			matCabina ->getTechnique(0) ->getPass(0)->createTextureUnitState("glass.jpg");
 			matCabina ->getTechnique(0) ->setCullingMode( CULL_NONE );
-			
+
+		Ogre::MaterialPtr matShipB = Ogre::MaterialManager::getSingleton().create(
+			"shipBack", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+
+		Ogre::TextureUnitState* shipBTexture =
+			matShipB ->getTechnique(0) ->getPass(0)->createTextureUnitState("Panels_refmask.png");
+			matShipB ->getTechnique(0) ->setCullingMode( CULL_NONE );
+
 /*ManualObject* cabina01 = mSceneMgr->createManualObject("cabina01");
 cabina01->begin("shipText", RenderOperation::OT_LINE_STRIP);
  
@@ -755,7 +762,7 @@ cabina01->end();
 	ManualObject* cabina010 = createTriangle(mSceneMgr,0.875f, 1.625f, 0.875f, 10, 10, 11, 1.5f, 0.5f, 0.5f, "cabina010MO", "shipText");
 		ManualObject* cabina09 = createPlane(mSceneMgr,1.375f, 2.125f, 1.625f, 0.875f, 2.5, 2.5, 10, 10, 3, 0.5f, 0.5f, 1.5f, "cabina09MO", "shipText");
 		ManualObject* cabina08 = createPlane(mSceneMgr,1.375f, 2.125f, 2.125f, 1.375f, -2.5, -2.5, 2.5, 2.5, 3, 0.5f, 0.5f, 3, "cabina08MO", "shipText");
-		ManualObject* cabina07 = createPlane(mSceneMgr,-2.125f, 2.125f, 1.375f, -1.375f, -2.5, -2.5, -2.5, -2.5, 0.5f, 0.5f, 3, 3, "cabina07MO", "shipText");
+		ManualObject* cabina07 = createPlane(mSceneMgr,-2.125f, 2.125f, 1.375f, -1.375f, -2.5, -2.5, -2.5, -2.5, 0.5f, 0.5f, 3, 3, "cabina07MO", "shipBack");
 		ManualObject* cabina06 = createPlane(mSceneMgr,-2.125f, -1.375f, -1.375f, -2.125f, -2.5, -2.5, 2.5, 2.5, 0.5f, 3, 3, 0.5f, "cabina06MO", "shipText");
 		ManualObject* cabina05 = createPlane(mSceneMgr,-2.125f, -1.375f, -0.875f, -1.625f, 2.5, 2.5, 10, 10, 0.5f, 3, 1.5f, 0.5f, "cabina04MO", "shipText");
 		ManualObject* cabina04 = createTriangle(mSceneMgr,-1.625f, -0.875f, -0.875f, 10, 10, 11, 0.5f, 1.5f, 0.5f, "cabina05MO", "shipText");
@@ -793,7 +800,7 @@ cabina01->end();
 	ManualObject* cabina110 = createTriangle(mSceneMgr,0.875f, 1.625f, 0.875f, 10, 10, 11, 1.5f, 0.5f, 0.5f, "cabina110MO", "shipText");
 		ManualObject* cabina19 = createPlane(mSceneMgr,1.375f, 2.125f, 1.625f, 0.875f, 2.5, 2.5, 10, 10, 5, 0.5f, 0.5f, 1.5f, "cabina19MO", "shipText");
 		ManualObject* cabina18 = createPlane(mSceneMgr,1.375f, 2.125f, 2.125f, 1.375f, -2.5, -2.5, 2.5, 2.5, 5, 0.5f, 0.5f, 5, "cabina18MO", "shipText");
-		ManualObject* cabina17 = createPlane(mSceneMgr,-2.125f, 2.125f, 1.375f, -1.375f, -2.5, -2.5, -2.5, -2.5, 0.5f, 0.5f, 5, 5, "cabina17MO", "shipText");
+		ManualObject* cabina17 = createPlane(mSceneMgr,-2.125f, 2.125f, 1.375f, -1.375f, -2.5, -2.5, -2.5, -2.5, 0.5f, 0.5f, 5, 5, "cabina17MO", "shipBack");
 		ManualObject* cabina16 = createPlane(mSceneMgr,-2.125f, -1.375f, -1.375f, -2.125f, -2.5, -2.5, 2.5, 2.5, 0.5f, 5, 5, 0.5f, "cabina16MO", "shipText");
 		ManualObject* cabina15 = createPlane(mSceneMgr,-2.125f, -1.375f, -0.875f, -1.625f, 2.5, 2.5, 10, 10, 0.5f, 5, 1.5f, 0.5f, "cabina14MO", "shipText");
 		ManualObject* cabina14 = createTriangle(mSceneMgr,-1.625f, -0.875f, -0.875f, 10, 10, 11, 0.5f, 1.5f, 0.5f, "cabina15MO", "shipText");
@@ -831,8 +838,7 @@ cabina01->end();
 		ManualObject* ala03 = createPlane(mSceneMgr,-2.72265625f, -1.8f, -1.8f, -2.72265625f, -1.8, -1.8, 1.5f, 1.5f, 1, 1, 1, 1, "ala03", "shipText");
 		ManualObject* ala02 = createPlane(mSceneMgr,-2.921875f, -2.72265625f, -2.72265625f, -2.921875f, -2, -1.8, 1.5f, 1.5f, 1, 1, 1, 1, "ala02", "shipText"); 				ManualObject* ala01 = createPlane(mSceneMgr,-8.5f, -2.921875f, -2.921875f, -8.5f, -1.5f, -2, 1.5f, 1.5f, 1, 1, 1, 1, "ala01", "shipText");
 
-		SceneNode* nodeAla01 = mSceneMgr->createSceneNode("nodeA01");
-		mSceneMgr->getRootSceneNode()->addChild(nodeAla01);
+		SceneNode* nodeAla01 = nodeCabina01->createChildSceneNode("nodeA01");
 		nodeAla01->attachObject(ala01); 
 		nodeAla01->attachObject(ala02); 
 		nodeAla01->attachObject(ala03); 
@@ -891,7 +897,249 @@ cabina01->end();
 		nodePunta01->attachObject(alaPuntaEnt01);
 		nodePunta01->setPosition(-8.5,9.5f,1.3);
 		nodePunta01->setScale(0.05f,0.02f,0.05f);
+				/* FIN Ala derecha sup */
+
+				/* Ala derecha inf */
+	
+		ManualObject* ala111 = createPlane(mSceneMgr,-2.72265625f, -1.8f, -1.8f, -2.72265625f, -1.8, -1.8, 1.5f, 1.5f, 0.5f, 0.5f, 0.5f, 0.5f, "ala111", "shipText2");
+		ManualObject* ala110 = createPlane(mSceneMgr,-2.921875f, -2.72265625f, -2.72265625f, -2.921875f, -2, -1.8, 1.5f, 1.5f, 0.5f, 0.5f, 0.5f, 0.5f, "ala110", "shipText2"); 						
+		ManualObject* ala19 = createPlane(mSceneMgr,-8.5f, -2.921875f, -2.921875f, -8.5f, -1.5f, -2, 1.5f, 1.5f, 0.5f, 0.5f, 0.5f, 0.5f, "ala19", "shipText2");
+
+		ManualObject* ala18 = createPlane(mSceneMgr,-2.72265625f, -1.8f, -1.8f, -2.72265625f, -1.8, -1.8, -1.8, -1.8, 0.5f, 0.5f, 1, 1, "ala18", "shipText2");	
+		ManualObject* ala17 = createPlane(mSceneMgr,-2.921875f, -2.72265625f, -2.72265625f, -2.921875f, -2, -1.8, -1.8, -2, 0.5f, 0.5f, 1, 1, "ala17", "shipText2");			ManualObject* ala16 = createPlane(mSceneMgr,-8.5f, -1.8f, -1.8f, -8.5f, 1.5f, 1.5f, 1.5f, 1.5f, 0.5f, 0.5f, 1, 1, "ala16", "shipText2");		
+		ManualObject* ala15 = createPlane(mSceneMgr,-8.5f, -8.5f, -8.5f, -8.5f, -1.5f, -1.5f, 1.5f, 1.5f, 1, 0.5f, 0.5f, 1, "ala15", "shipText2");								ManualObject* ala14 = createPlane(mSceneMgr,-8.5f, -2.921875f, -2.921875f, -8.5f, -1.5f, -2, -2, -1.5f, 0.5f, 0.5f, 1, 1, "ala14", "shipText2");
+		ManualObject* ala13 = createPlane(mSceneMgr,-2.72265625f, -1.8f, -1.8f, -2.72265625f, -1.8, -1.8, 1.5f, 1.5f, 1, 1, 1, 1, "ala13", "shipText");
+		ManualObject* ala12 = createPlane(mSceneMgr,-2.921875f, -2.72265625f, -2.72265625f, -2.921875f, -2, -1.8, 1.5f, 1.5f, 1, 1, 1, 1, "ala12", "shipText"); 				ManualObject* ala11 = createPlane(mSceneMgr,-8.5f, -2.921875f, -2.921875f, -8.5f, -1.5f, -2, 1.5f, 1.5f, 1, 1, 1, 1, "ala11", "shipText");
+
+		SceneNode* nodeala11 = nodeCabina01->createChildSceneNode("nodeA11");
+		nodeala11->attachObject(ala11); 
+		nodeala11->attachObject(ala12); 
+		nodeala11->attachObject(ala13); 
+		nodeala11->attachObject(ala14); 
+		nodeala11->attachObject(ala15); 
+		nodeala11->attachObject(ala16); 
+		nodeala11->attachObject(ala17); 
+		nodeala11->attachObject(ala18); 
+		nodeala11->attachObject(ala19); 
+		nodeala11->attachObject(ala110); 
+		nodeala11->attachObject(ala111); 
+
+
+		Ogre::Entity* alaBarrilEnt11 = mSceneMgr->createEntity("Barrel.mesh");
+		alaBarrilEnt11->setMaterial(matShip);
+		Ogre::SceneNode* nodeAlaBarril11 = nodeala11 ->createChildSceneNode("nodeAlaB11");
+		nodeAlaBarril11->attachObject(alaBarrilEnt11);
+		nodeAlaBarril11->setPosition(-2.5f,1.5f,1.3);
+		nodeAlaBarril11->setScale(0.35f,0.45f,0.35f);
+
+		Ogre::Entity* alaCilindroEnt11 = mSceneMgr->createEntity("usb_cilindro02.mesh");
+		alaCilindroEnt11->setMaterial(matShip);
+		Ogre::SceneNode* nodeAlaCilindro11 = nodeala11 ->createChildSceneNode();
+		nodeAlaCilindro11->attachObject(alaCilindroEnt11);
+		nodeAlaCilindro11->setPosition(-2.5,-1.0f,1.3);
+		nodeAlaCilindro11->setScale(0.35f,0.25f,0.35f);
+
+
+		Ogre::Entity* alaCilindroEnt12 = mSceneMgr->createEntity("usb_cilindro.mesh");
+		alaCilindroEnt12->setMaterial(matShip);
+		Ogre::SceneNode* nodeAlaCilindro12 = nodeala11 ->createChildSceneNode();
+		nodeAlaCilindro12->attachObject(alaCilindroEnt12);
+		nodeAlaCilindro12->setPosition(-8.5,-1.0f,1.3);
+		nodeAlaCilindro12->setScale(0.15f,0.4f,0.15f);
+
+		Ogre::Entity* alaCilindroEnt13 = mSceneMgr->createEntity("usb_cilindro.mesh");
+		alaCilindroEnt13->setMaterial(matShip);
+		Ogre::SceneNode* nodeAlaCilindro13 = nodeala11 ->createChildSceneNode();
+		nodeAlaCilindro13->attachObject(alaCilindroEnt13);
+		nodeAlaCilindro13->setPosition(-8.5,2.0f,1.3);
+		nodeAlaCilindro13->setScale(0.05f,0.4f,0.05f);
+
+		Ogre::Entity* alaCilindroEnt14 = mSceneMgr->createEntity("usb_cilindro.mesh");
+		alaCilindroEnt14->setMaterial(matShip);
+		Ogre::SceneNode* nodeAlaCilindro14 = nodeala11 ->createChildSceneNode();
+		nodeAlaCilindro14->attachObject(alaCilindroEnt14);
+		nodeAlaCilindro14->setPosition(-8.5,6.0f,1.3);
+		nodeAlaCilindro14->setScale(0.015f,0.8f,0.015f);
+
+		Ogre::Entity* alaPuntaEnt11 = mSceneMgr->createEntity("usb_torus.mesh");
+		alaPuntaEnt11->setMaterial(matShip2);
+		Ogre::SceneNode* nodePunta11 = nodeala11 ->createChildSceneNode();
+		nodePunta11->attachObject(alaPuntaEnt11);
+		nodePunta11->setPosition(-8.5,9.5f,1.3);
+		nodePunta11->setScale(0.05f,0.02f,0.05f);
+		nodeala11->rotate(Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3(1,0,0)) , Ogre::Node::TransformSpace::TS_WORLD);
+		//nodeala11->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,1,0)) , Ogre::Node::TransformSpace::TS_WORLD);
+
+
+		nodeala11->setScale(1,-1,1);
+		nodeala11->setPosition(0,0,0.5F);
+
+	/* FIN Ala derecha inf */
+
+	/* Ala izquierda */
+		ManualObject* ala211 = createPlane(mSceneMgr,-2.72265625f, -1.8f, -1.8f, -2.72265625f, -1.8, -1.8, 1.5f, 1.5f, 0.5f, 0.5f, 0.5f, 0.5f, "ala211", "shipText2");
+		ManualObject* ala210 = createPlane(mSceneMgr,-2.921875f, -2.72265625f, -2.72265625f, -2.921875f, -2, -1.8, 1.5f, 1.5f, 0.5f, 0.5f, 0.5f, 0.5f, "ala210", "shipText2"); 						
+		ManualObject* ala29 = createPlane(mSceneMgr,-8.5f, -2.921875f, -2.921875f, -8.5f, -1.5f, -2, 1.5f, 1.5f, 0.5f, 0.5f, 0.5f, 0.5f, "ala29", "shipText2");
+
+		ManualObject* ala28 = createPlane(mSceneMgr,-2.72265625f, -1.8f, -1.8f, -2.72265625f, -1.8, -1.8, -1.8, -1.8, 0.5f, 0.5f, 1, 1, "ala28", "shipText2");	
+		ManualObject* ala27 = createPlane(mSceneMgr,-2.921875f, -2.72265625f, -2.72265625f, -2.921875f, -2, -1.8, -1.8, -2, 0.5f, 0.5f, 1, 1, "ala27", "shipText2");			ManualObject* ala26 = createPlane(mSceneMgr,-8.5f, -1.8f, -1.8f, -8.5f, 1.5f, 1.5f, 1.5f, 1.5f, 0.5f, 0.5f, 1, 1, "ala26", "shipText2");		
+		ManualObject* ala25 = createPlane(mSceneMgr,-8.5f, -8.5f, -8.5f, -8.5f, -1.5f, -1.5f, 1.5f, 1.5f, 1, 0.5f, 0.5f, 1, "ala25", "shipText2");								ManualObject* ala24 = createPlane(mSceneMgr,-8.5f, -2.921875f, -2.921875f, -8.5f, -1.5f, -2, -2, -1.5f, 0.5f, 0.5f, 1, 1, "ala24", "shipText2");
+		ManualObject* ala23 = createPlane(mSceneMgr,-2.72265625f, -1.8f, -1.8f, -2.72265625f, -1.8, -1.8, 1.5f, 1.5f, 1, 1, 1, 1, "ala23", "shipText");
+		ManualObject* ala22 = createPlane(mSceneMgr,-2.921875f, -2.72265625f, -2.72265625f, -2.921875f, -2, -1.8, 1.5f, 1.5f, 1, 1, 1, 1, "ala22", "shipText"); 				ManualObject* ala21 = createPlane(mSceneMgr,-8.5f, -2.921875f, -2.921875f, -8.5f, -1.5f, -2, 1.5f, 1.5f, 1, 1, 1, 1, "ala21", "shipText");
+
+		SceneNode* nodeAla21 = nodeCabina01->createChildSceneNode();
+		nodeAla21->attachObject(ala21); 
+		nodeAla21->attachObject(ala22); 
+		nodeAla21->attachObject(ala23); 
+		nodeAla21->attachObject(ala24); 
+		nodeAla21->attachObject(ala25); 
+		nodeAla21->attachObject(ala26); 
+		nodeAla21->attachObject(ala27); 
+		nodeAla21->attachObject(ala28); 
+		nodeAla21->attachObject(ala29); 
+		nodeAla21->attachObject(ala210); 
+		nodeAla21->attachObject(ala211); 
+
+
+
+
+		Ogre::Entity* alaBarrilEnt21 = mSceneMgr->createEntity("Barrel.mesh");
+		alaBarrilEnt21->setMaterial(matShip);
+		Ogre::SceneNode* nodeAlaBarril21 = nodeAla21 ->createChildSceneNode();
+		nodeAlaBarril21->attachObject(alaBarrilEnt21);
+		nodeAlaBarril21->setPosition(-2.5f,1.5f,1.3);
+		nodeAlaBarril21->setScale(0.35f,0.45f,0.35f);
+
+		Ogre::Entity* alaCilindroEnt21 = mSceneMgr->createEntity("usb_cilindro02.mesh");
+		alaCilindroEnt21->setMaterial(matShip);
+		Ogre::SceneNode* nodeAlaCilindro21 = nodeAla21 ->createChildSceneNode();
+		nodeAlaCilindro21->attachObject(alaCilindroEnt21);
+		nodeAlaCilindro21->setPosition(-2.5,-1.0f,1.3);
+		nodeAlaCilindro21->setScale(0.35f,0.25f,0.35f);
+
+
+		Ogre::Entity* alaCilindroEnt22 = mSceneMgr->createEntity("usb_cilindro.mesh");
+		alaCilindroEnt22->setMaterial(matShip);
+		Ogre::SceneNode* nodeAlaCilindro22 = nodeAla21 ->createChildSceneNode();
+		nodeAlaCilindro22->attachObject(alaCilindroEnt22);
+		nodeAlaCilindro22->setPosition(-8.5,-1.0f,1.3);
+		nodeAlaCilindro22->setScale(0.15f,0.4f,0.15f);
+
+		Ogre::Entity* alaCilindroEnt23 = mSceneMgr->createEntity("usb_cilindro.mesh");
+		alaCilindroEnt23->setMaterial(matShip);
+		Ogre::SceneNode* nodeAlaCilindro23 = nodeAla21 ->createChildSceneNode();
+		nodeAlaCilindro23->attachObject(alaCilindroEnt23);
+		nodeAlaCilindro23->setPosition(-8.5,2.0f,1.3);
+		nodeAlaCilindro23->setScale(0.05f,0.4f,0.05f);
+
+		Ogre::Entity* alaCilindroEnt24 = mSceneMgr->createEntity("usb_cilindro.mesh");
+		alaCilindroEnt24->setMaterial(matShip);
+		Ogre::SceneNode* nodeAlaCilindro24 = nodeAla21 ->createChildSceneNode();
+		nodeAlaCilindro24->attachObject(alaCilindroEnt24);
+		nodeAlaCilindro24->setPosition(-8.5,6.0f,1.3);
+		nodeAlaCilindro24->setScale(0.015f,0.8f,0.015f);
+
+		Ogre::Entity* alaPuntaEnt21 = mSceneMgr->createEntity("usb_torus.mesh");
+		alaPuntaEnt21->setMaterial(matShip2);
+		Ogre::SceneNode* nodePunta21 = nodeAla21 ->createChildSceneNode();
+		nodePunta21->attachObject(alaPuntaEnt21);
+		nodePunta21->setPosition(-8.5,9.5f,1.3);
+		nodePunta21->setScale(0.05f,0.02f,0.05f);
+				/* FIN Ala izquierda sup */
+		//nodeAla21->setPosition(1,0,1);
+		//nodeAla21->rotate(Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3(0,0,1)) , Ogre::Node::TransformSpace::TS_WORLD);
+		//nodeAla21->rotate(Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3(0,1,0)) , Ogre::Node::TransformSpace::TS_WORLD);
+		nodeAla21->rotate(Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3(0,0,1)) , Ogre::Node::TransformSpace::TS_WORLD);
+		//nodeala11->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,1,0)) , Ogre::Node::TransformSpace::TS_WORLD);
+
+
+		nodeAla21->setScale(1,-1,1);
+		nodeAla21->setPosition(0,0,0.5F);
+
+
+
+
+	/* Ala izquierda */
+		ManualObject* ala311 = createPlane(mSceneMgr,-2.72265625f, -1.8f, -1.8f, -2.72265625f, -1.8, -1.8, 1.5f, 1.5f, 0.5f, 0.5f, 0.5f, 0.5f, "ala311", "shipText2");
+		ManualObject* ala310 = createPlane(mSceneMgr,-2.921875f, -2.72265625f, -2.72265625f, -2.921875f, -2, -1.8, 1.5f, 1.5f, 0.5f, 0.5f, 0.5f, 0.5f, "ala310", "shipText2"); 						
+		ManualObject* ala39 = createPlane(mSceneMgr,-8.5f, -2.921875f, -2.921875f, -8.5f, -1.5f, -2, 1.5f, 1.5f, 0.5f, 0.5f, 0.5f, 0.5f, "ala39", "shipText2");
+
+		ManualObject* ala38 = createPlane(mSceneMgr,-2.72265625f, -1.8f, -1.8f, -2.72265625f, -1.8, -1.8, -1.8, -1.8, 0.5f, 0.5f, 1, 1, "ala38", "shipText2");	
+		ManualObject* ala37 = createPlane(mSceneMgr,-2.921875f, -2.72265625f, -2.72265625f, -2.921875f, -2, -1.8, -1.8, -2, 0.5f, 0.5f, 1, 1, "ala37", "shipText2");			ManualObject* ala36 = createPlane(mSceneMgr,-8.5f, -1.8f, -1.8f, -8.5f, 1.5f, 1.5f, 1.5f, 1.5f, 0.5f, 0.5f, 1, 1, "ala36", "shipText2");		
+		ManualObject* ala35 = createPlane(mSceneMgr,-8.5f, -8.5f, -8.5f, -8.5f, -1.5f, -1.5f, 1.5f, 1.5f, 1, 0.5f, 0.5f, 1, "ala35", "shipText2");								ManualObject* ala34 = createPlane(mSceneMgr,-8.5f, -2.921875f, -2.921875f, -8.5f, -1.5f, -2, -2, -1.5f, 0.5f, 0.5f, 1, 1, "ala34", "shipText2");
+		ManualObject* ala33 = createPlane(mSceneMgr,-2.72265625f, -1.8f, -1.8f, -2.72265625f, -1.8, -1.8, 1.5f, 1.5f, 1, 1, 1, 1, "ala33", "shipText");
+		ManualObject* ala32 = createPlane(mSceneMgr,-2.921875f, -2.72265625f, -2.72265625f, -2.921875f, -2, -1.8, 1.5f, 1.5f, 1, 1, 1, 1, "ala32", "shipText"); 				ManualObject* ala31 = createPlane(mSceneMgr,-8.5f, -2.921875f, -2.921875f, -8.5f, -1.5f, -2, 1.5f, 1.5f, 1, 1, 1, 1, "ala31", "shipText");
+
+		SceneNode* nodeAla31 = nodeCabina01->createChildSceneNode();
+		nodeAla31->attachObject(ala31); 
+		nodeAla31->attachObject(ala32); 
+		nodeAla31->attachObject(ala33); 
+		nodeAla31->attachObject(ala34); 
+		nodeAla31->attachObject(ala35); 
+		nodeAla31->attachObject(ala36); 
+		nodeAla31->attachObject(ala37); 
+		nodeAla31->attachObject(ala38); 
+		nodeAla31->attachObject(ala39); 
+		nodeAla31->attachObject(ala310); 
+		nodeAla31->attachObject(ala311); 
+
+
+		Ogre::Entity* alaBarrilEnt31 = mSceneMgr->createEntity("Barrel.mesh");
+		alaBarrilEnt31->setMaterial(matShip);
+		Ogre::SceneNode* nodeAlaBarril31 = nodeAla31 ->createChildSceneNode();
+		nodeAlaBarril31->attachObject(alaBarrilEnt31);
+		nodeAlaBarril31->setPosition(-2.5f,1.5f,1.3);
+		nodeAlaBarril31->setScale(0.35f,0.45f,0.35f);
+
+		Ogre::Entity* alaCilindroEnt31 = mSceneMgr->createEntity("usb_cilindro02.mesh");
+		alaCilindroEnt31->setMaterial(matShip);
+		Ogre::SceneNode* nodeAlaCilindro31 = nodeAla31 ->createChildSceneNode();
+		nodeAlaCilindro31->attachObject(alaCilindroEnt31);
+		nodeAlaCilindro31->setPosition(-2.5,-1.0f,1.3);
+		nodeAlaCilindro31->setScale(0.35f,0.25f,0.35f);
+
+
+		Ogre::Entity* alaCilindroEnt32 = mSceneMgr->createEntity("usb_cilindro.mesh");
+		alaCilindroEnt32->setMaterial(matShip);
+		Ogre::SceneNode* nodeAlaCilindro32 = nodeAla31 ->createChildSceneNode();
+		nodeAlaCilindro32->attachObject(alaCilindroEnt32);
+		nodeAlaCilindro32->setPosition(-8.5,-1.0f,1.3);
+		nodeAlaCilindro32->setScale(0.15f,0.4f,0.15f);
+
+		Ogre::Entity* alaCilindroEnt33 = mSceneMgr->createEntity("usb_cilindro.mesh");
+		alaCilindroEnt33->setMaterial(matShip);
+		Ogre::SceneNode* nodeAlaCilindro33 = nodeAla31 ->createChildSceneNode();
+		nodeAlaCilindro33->attachObject(alaCilindroEnt33);
+		nodeAlaCilindro33->setPosition(-8.5,2.0f,1.3);
+		nodeAlaCilindro33->setScale(0.05f,0.4f,0.05f);
+
+		Ogre::Entity* alaCilindroEnt34 = mSceneMgr->createEntity("usb_cilindro.mesh");
+		alaCilindroEnt34->setMaterial(matShip);
+		Ogre::SceneNode* nodeAlaCilindro34 = nodeAla31 ->createChildSceneNode();
+		nodeAlaCilindro34->attachObject(alaCilindroEnt34);
+		nodeAlaCilindro34->setPosition(-8.5,6.0f,1.3);
+		nodeAlaCilindro34->setScale(0.015f,0.8f,0.015f);
+
+		Ogre::Entity* alaPuntaEnt31 = mSceneMgr->createEntity("usb_torus.mesh");
+		alaPuntaEnt31->setMaterial(matShip2);
+		Ogre::SceneNode* nodePunta31 = nodeAla31 ->createChildSceneNode();
+		nodePunta31->attachObject(alaPuntaEnt31);
+		nodePunta31->setPosition(-8.5,9.5f,1.3);
+		nodePunta31->setScale(0.05f,0.02f,0.05f);
+				/* FIN Ala izquierda sup */
+
+		nodeAla31->rotate(Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3(1,0,0)) , Ogre::Node::TransformSpace::TS_WORLD);
+		//nodeala11->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,1,0)) , Ogre::Node::TransformSpace::TS_WORLD);
+
+
+		//nodeAla31->setScale(1,-1,1);
+		nodeAla31->setPosition(0,0,0.5F);
+		nodeAla31->rotate(Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3(0,0,1)) , Ogre::Node::TransformSpace::TS_WORLD);
+
+
 		// Fin Nave
+
+
 	}
 
 };
