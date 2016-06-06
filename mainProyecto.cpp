@@ -1,5 +1,7 @@
 #include "Ogre\ExampleApplication.h"
 #include "stdafx.h"
+bool isR = false;
+bool isE = false;
 
 /* Proyecto 4 - Computación Gráfica
 Abr-Jul 2016
@@ -99,6 +101,7 @@ public:
 		AnimacionLaser2->addTime(evt.timeSinceLastFrame);
 		AnimacionLaser3->addTime(evt.timeSinceLastFrame);
 		AnimacionLaser4->addTime(evt.timeSinceLastFrame);
+//		AnimationWingO1->addTime(evt.timeSinceLastFrame);
 		return true;
 	}
 
@@ -1130,6 +1133,56 @@ cabina01->end();
 
 		// Fin Nave
 
+
+
+
+		//Animacion abrir Alas
+		// 1
+		/*float duration2 = 2.0;
+		Ogre::Animation* animationLaser2 = mSceneMgr->createAnimation("AnimWingO1",duration2);
+		AnimationWingO1->setInterpolationMode(Animation::IM_SPLINE);
+		
+		Ogre::NodeAnimationTrack* WingO1 = AnimationWingO1->createNodeTrack(2,nodeAla31);
+		Ogre::TransformKeyFrame* keyWO1;
+
+		Ogre::Quaternion Quat1 = nodeAla31->getOrientation();
+		Ogre::Degree DegX, DegY, DegZ; 
+		Quat.ToAngleAxis( DegX, Ogre::Vector3(1,0,0) );
+		Quat.ToAngleAxis( DegY, Ogre::Vector3(0,1,0) );
+		Quat.ToAngleAxis( DegZ, Ogre::Vector3(0,0,1) );
+
+
+		keyWO1 = WingO1->createNodeKeyFrame(0.0);
+		keyWO1->setRotation(Quat1);
+
+		if (DegZ > 0){
+			if (DegZ < 45 && isE) {
+				keyWO1 = WingO1->createNodeKeyFrame(2.0);
+				keyWO1->setRotation(Ogre::Quaternion(Ogre::Degree(45), Ogre::Vector3(0,0,1)));
+			}
+			else if (DegZ < 45 && isR) {
+				keyWO1 = WingO1->createNodeKeyFrame(2.0);
+				keyWO1->setRotation(Ogre::Quaternion(Ogre::Degree(0), Ogre::Vector3(0,0,1)));
+			}
+		}
+		else{
+			if (isE) {
+				keyWO1 = WingO1->createNodeKeyFrame(2.0);
+				keyWO1->setRotation(Ogre::Quaternion(Ogre::Degree(45), Ogre::Vector3(0,0,1)));
+			}
+		}
+
+		AnimationWingO1=mSceneMgr->createAnimationState("AnimWingO1");
+		AnimationWingO1->setEnabled(true);
+		AnimationWingO1->setLoop(true);*/
+		// 2
+
+		// 3
+
+		// 4
+
+
+		//Fin Animacion abrir Alas
 
 	}
 
